@@ -27,7 +27,7 @@ Access the tool directly via our web server: [Link to your hosted page] (Coming 
 To ensure data privacy or work without an internet connection:
 1.  Clone this repository:
     ```bash
-    git clone [https://github.com/YourUsername/KM-PoPiGo.git](https://github.com/YourUsername/KM-PoPiGo.git)
+    git clone [https://github.com/ZheqingZhu/kmpopigo.git](https://github.com/ZheqingZhu/kmpopigo.git)
     ```
 2.  Open the `index.html` file in any modern web browser (Chrome, Edge, Firefox).
 
