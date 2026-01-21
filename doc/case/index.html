@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Example Cases - KM-PoPiGo</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">KM-PoPiGo</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../index.html" class="nav-link">Introduction</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../ipd/index.html" class="nav-link">IPD Reconstruction</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./index.html" class="nav-link">Example Cases</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../reshow/index.html" class="nav-link">Project Management</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../datasets/index.html" class="nav-link">Benchmark Dataset</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../ipd/index.html" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../reshow/index.html" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#km-curve-case" class="nav-link">Example Cases</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#module-introduction" class="nav-link">Module Introduction</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#module-usage" class="nav-link">Module Usage</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="km-curve-case">Example Cases</h1>
+                        <h2 id="module-introduction">Module Introduction</h2> <p>This module provides pre-configured marking scenarios (workspaces) representing <strong>eight distinct constraint combinations</strong>. These scenarios are derived from <strong>two sets of KM images</strong> (comprising a total of <strong>four individual KM curves</strong>). For each dataset, the ground-truth metrics—including Hazard Ratios (HR), median survival times, and 1- to 5-year survival rates—are provided. These details allow users to quantitatively assess the fidelity of the IPD reconstructed by KM-PoPiGo by comparing the calculated results against the actual reported survival statistics.</p>
+
+                        <p>The reconstruction process relies on various Constraints, denoted as combinations of Sample Size (N), Number of Events (E), At-risk Table (R), and Censoring Times (C). This module allows users to load and inspect the specific marking status for the eight combinations: <strong>NERC, NER, NEC, NRC, NE, NR, NC, and N</strong>. By examining these pre-configured workspaces, users can intuitively learn the expected marking patterns and the corresponding input values required in the "Set Study Parameters" module for various constraint combinations. Furthermore, users can interactively modify these pre-loaded workspaces to validate reconstruction results, serving as an effective training ground to quickly master the KM-PoPiGo workflow.</p>
+                        <h2 id="module-usage">Module Usage</h2>
+                        <ol> <li><strong>Access Interface:</strong> Click the <strong>"Example Cases"</strong> button to open the case selection panel.</li> <li><strong>Load Scenario:</strong> Locate the desired constraint combination (e.g., NERC, NER) and click the corresponding <strong>"Load"</strong> button. The <strong>KM-PoPiGo</strong> tool will automatically populate the workspace with the pre-set data.</li> </ol> <p><strong>Visual & Parameter Feedback:</strong>
+
+
+                        The displayed markings and parameter inputs will vary dynamically based on the selected constraint combination: <ul> <li><strong>Full Constraint (e.g., NERC):</strong> The workspace will display both <strong>Key Points</strong> and <strong>Censoring Times</strong> on the graph. Simultaneously, the <strong>"Set Study Parameters"</strong> module will be filled with the complete dataset (Sample Size, Number of Events, At-risk Table, and Censoring Times).</li> <li><strong>Partial Constraint (e.g., NER):</strong> The <strong>Censoring Times</strong> will be absent from the graph (as Censoring data is not included).</li> <li><strong>Minimal Constraint (e.g., N):</strong> The tool will only load the <strong>Key Points</strong> and the Sample Size, leaving other parameter fields blank.</li> </ul> </p>
+                        <h3 id="notes">Important Notes</h3>
+
+                        <ul> <li><strong>Educational Value:</strong> In the <strong>"Example Cases"</strong> module, each KM curve is presented with multiple <strong>constraint combinations</strong> (e.g., NERC vs. N). This design helps users understand how the <strong>marking patterns</strong> and the input requirements in <strong>"Set Study Parameters"</strong> evolve under different scenarios.</li> <li><strong>Best Practice for Reconstruction:</strong> For real-world tasks, users are strongly advised to input as many <strong>Constraints</strong> as available. Providing a comprehensive set of constraints (e.g., including At-risk tables and Censoring times) significantly maximizes the <strong>accuracy and reliability</strong> of the final IPD reconstruction.</li> </ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

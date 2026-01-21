@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>IPD Reconstructor - KM-PoPiGo</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">KM-PoPiGo</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                    <ul class="nav navbar-nav">
+                        <li class="navitem">
+                            <a href="../index.html" class="nav-link">Introduction</a>
+                        </li>
+
+                        <li class="navitem active">
+                            <a href="./index.html" class="nav-link">IPD Reconstruction</a>
+                        </li>
+
+                        <li class="navitem">
+                            <a href="../case/index.html" class="nav-link">Example Cases</a>
+                        </li>
+
+                        <li class="navitem">
+                            <a href="../reshow/index.html" class="nav-link">Project Management</a>
+                        </li>
+
+                        <li class="navitem">
+                            <a href="../datasets/index.html" class="nav-link">Benchmark Datasets</a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../index.html" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../case/index.html" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#ipd-reconstruction-process" class="nav-link">IPD Reconstruction</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1import-kaplan-meier-image" class="nav-link">1. Import KM Image</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2condition-data-input" class="nav-link">2. Set Study Parameters</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3click-origin00" class="nav-link">3. Calibrate Origin (0,0)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#4input-x-max-click-x-max-1" class="nav-link">4. Calibrate Axis Limits</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#5pick-break-points" class="nav-link">5. Mark Key Points</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#6pick-censoring-marks" class="nav-link">6. Mark Censoring Times</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#7reconstruct-ipd" class="nav-link">7. Run Reconstruction</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#reconstruction-results" class="nav-link">IPD History & Data Export</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#r-code" class="nav-link">Generate R Code</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="ipd-reconstruction-process">IPD Reconstruction</h1>
+<p>The KM-PoPiGo platform enables the high-fidelity reconstruction of Individual Patient Data (IPD) from Kaplan-Meier curves. To ensure structured data management, each session is focused on a single KM curve, with the workflow standardized into seven sequential steps. While Steps 1, 3, 5, 6, and 7 are fully interactive (point-and-click), Steps 2 and 4 involve manual entry of study parameters. Once the reconstruction is finalized, the results are automatically saved to the Reconstruction Results module. This allows users to centrally manage and export the specific IPD dataset generated for each historically reconstructed KM curve.</p>
+<p><img alt="image-20250115110107896" src="..\images\sevenbuttion.png" /></p>
+<h2 id="1import-kaplan-meier-image">1. Import KM Image</h2>
+                        <p>First, acquire the target Kaplan-Meier curve from the published study (e.g., using a high-resolution screen capture) and save it locally. Then, click the <strong>"Import KM Image"</strong> button to load the file. Upon a successful import, the image will be rendered in the main canvas area, allowing users to identify a target curve and proceed with Steps 2–7 for IPD reconstruction.</p>
+<h2 id="2condition-data-input">2. Set Study Parameters</h2>
+<p>This step involves configuring the study parameters, including the At-risk Table, Sample Size, Number of Events, and Group Name. Note that <strong>Sample Size</strong> and <strong>Group Name</strong> are mandatory fields. If the <strong>At-risk Table</strong> is reported in the published study, users should input the time intervals and corresponding number at risk for the specific curve being reconstructed.</p>
+<p>
+    <strong>Example Workflow:</strong>
+    To reconstruct the IPD for the <em>Erlotinib</em> group (see figure below), first input the At-risk data. Given the time points [0, 10, 20, 30, 40, 50] and risk counts [80, 32, 12, 7, 4, 1]: <ol> <li>Enter <strong>"10"</strong> in the <strong>"Time Interval"</strong> field.</li> <li>Enter <strong>"80 32 12 7 4 1"</strong> (space-separated) in the <strong>"At Risk Num"</strong> field.</li> <li>Click <strong>"OK"</strong> to automatically generate the At-risk Table. The <strong>Sample Size</strong> field will be auto-populated based on the count at time 0.</li> <li>Finally, input the <strong>"Number of Events"</strong> (If the Number of Events is not available, please retain the default value of 0.) and <strong>"Group Name"</strong>, then close the window to complete Step 2.</li> </ol> </p>
+<p><img alt="image-20250115112154623" src="..\images\r1.png" /></p>
+<p><img alt="image-20250115113553892" src="..\images\r2.png" /></p>
+<h2 id="3click-origin00">3. Calibrate Origin (0,0)</h2>
+                        <p>To establish the coordinate system, click the <strong>"Calibrate Origin (0,0)"</strong> button to activate the tool. Then, precisely click the origin point (0,0) on the KM curve image. The selected location will be visualized as a <strong>red dot</strong>.</p>
+                        <p><strong>Crucial Note:</strong> Users must carefully identify the true geometric origin. While typically located at the exact intersection of the X and Y axes, the origin may be spatially offset in certain publication styles (as illustrated in the figure below).
+                            If the initial placement is inaccurate, simply click again to <strong>reposition</strong> the point until precise alignment is achieved.</p>
+<p><img alt="image-20250115171235952" src="..\images\setpoint00.png" /></p>
+<h2 id="4input-x-max-click-x-max-1">4. Calibrate Axis Limits</h2>
+<p><img alt="image-20250115171815078" src="..\images\setpointmax.png" /></p>
+                        <p>Click the <strong>"Calibrate Axis Limits"</strong> button to initiate the process. <ol> <li><strong>Input Value</strong>: A dialog box will appear. Enter the numerical value corresponding to the <strong>maximum X-axis limit</strong> (e.g., the largest time point marked on the axis) and click "OK".</li> <li><strong>Mark Coordinate</strong>: Precisely click the point on the graph representing the coordinate <strong>(X_max, 1.0)</strong>. This is typically the intersection of the vertical line at the maximum X-value and the horizontal line at the maximum Y-value (100% survival).</li> </ol> Similar to the origin calibration, this step supports <strong>iterative adjustment</strong>: simply re-click to correct the position if the initial placement is inaccurate.</p>
+<p><img alt="image-20250115172307653" src="..\images\setpointmaxresult.png" /></p>
+<h2 id="5pick-break-points">5. Mark Key Points</h2>
+                        <strong>Basic Operation:</strong> The initial point (T=0) is automatically marked. Start by selecting the <strong>next key point</strong> along the curve. The tool generates a <strong>real-time reconstruction curve</strong> overlaying the original image for immediate verification.</p>
+
+                        <p><strong>Interactive Editing & Smart Correction:</strong></p> <ul> <li><strong>Add Point:</strong> Left-click to add a new key point.</li> <li><strong>Delete Point:</strong> Right-click on an existing point to remove it.</li> <li><strong>Auto-Correction:</strong> Points violating KM constraints (e.g., monotonicity) are <strong>automatically adjusted</strong> by the algorithm. Therefore, users need only focus on maximizing the <strong>visual overlap</strong> (fidelity) between the real-time curve and the original image.</li> </ul>
+
+                        <p><strong>Special Instructions for Endpoints:</strong></p> <ul> <li><strong>Horizontal Endpoint (Censoring):</strong> If the curve ends horizontally, click slightly <strong>above</strong> the previous point.</li> <li><strong>Zero Survival Endpoint:</strong> If the curve drops to zero, click slightly <strong>below the X-axis</strong> (auto-clamped to 0).</li> </ul>
+<p><img alt="image-20250116092131514" src="..\images\points.png" /></p>
+<h2 id="6pick-censoring-marks">6. Mark Censoring Times</h2>
+                        <p>If the published curve visualizes censoring events (typically shown as vertical tick marks or crosses), click the <strong>"Mark Censoring Times"</strong> button to record them.
+
+
+                            <strong>Interactive Editing:</strong> <ul> <li><strong>Add Mark:</strong> Left-click on the censoring mark on the curve.</li> <li><strong>Delete Mark:</strong> Right-click on an existing mark to remove it.</li> </ul> <p><strong>Crucial Note on Data Reliability:</strong> Users should exercise caution and <strong>only mark censoring events that are clearly distinguishable</strong>. If a mark is ambiguous or blurred due to image quality, it is preferable to omit it to maintain the statistical integrity of the reconstruction.</p>
+<p><img alt="image-20250116093355459" src="..\images\censors.png" /></p>
+<h2 id="7reconstruct-ipd">7. Run Reconstruction</h2>
+                        <p>Initiate the core calculation by clicking the <strong>"Run Reconstruction"</strong> button. The tool employs a genetic optimization algorithm to iteratively infer event times and censoring distributions for each time interval.
+
+
+                            <strong>Performance Note:</strong> The computational duration scales with data complexity. A larger total sample size or an increased number of marked points will naturally require more processing time to reach convergence.</p>
+<p><img alt="image-20250116094538114" src="..\images\reconstructipd.png" /></p>
+<h2 id="reconstruction-results">Reconstruction Results & Data Export</h2>
+                        <p>Upon the completion of the reconstruction algorithm, the generated datasets are automatically archived in the <strong>"Reconstruction Results"</strong> module. By navigating to this section, users can access a central repository of all processed Kaplan-Meier curves.</p> <p>Key functionalities in this module include:</p> <ul> <li><strong>Data Review:</strong> Inspect the detailed Individual Patient Data (IPD) generated for each session.</li> <li><strong>Record Management:</strong> Delete obsolete or incorrect historical records to maintain a clean workspace.</li> <li><strong>Data Export:</strong> Download the specific IPD datasets as standard <strong>CSV files</strong>, ready for downstream statistical analysis (e.g., in R, SPSS, or Python).</li> </ul>
+<p><img alt="image-20250116094650490" src="..\images\result.png" /></p>
+<h2 id="r-code">Generate R Code</h2>
+                        <p><strong>KM-PoPiGo</strong> facilitates seamless downstream analysis by providing automated generation of commonly used R scripts. Access this interface by clicking the <strong>"Generate R Code"</strong> button. Supported analyses include:</p> <ul> <li><strong>Hazard Ratio (HR) Calculation</strong></li> <li><strong>Median & Survival Probability (Median Survival Time and Survival Rate)</strong></li> <li><strong>Kaplan-Meier Curve Plotting</strong></li> </ul>
+                        <p><strong>Configuration Rules:</strong>
+                            The <strong>Median & Survival Probability</strong> function is designed for <strong>single-group</strong> analysis. In contrast, the <strong>Hazard Ratio</strong> and <strong>KM Plotting</strong> functions support <strong>multi-group</strong> comparisons. When generating Hazard Ratio scripts, a <strong>Reference Group</strong> must be explicitly selected.</p>
+                        <p><strong>Adaptive Data Integration:</strong>
+The tool intelligently formats the output based on sample size: <ul> <li><strong>Small Sample Size:</strong> The IPD data is <strong>directly embedded</strong> within the R script. Users can simply copy and paste the code into R for immediate execution without external dependencies.</li> <li><strong>Large Sample Size:</strong> To maintain code readability and performance, the script is generated to <strong>load the IPD via CSV</strong>. Ensure the corresponding data file is saved in your R working directory.</li> </ul> </p>
+<p><img alt="image-20250116112057615" src="..\images\rcode.png" /></p>
+<p>For example, if we select the Erlotinib and Erlotinib+BEV groups to generate R code, and choose Erlotinib as the reference group, the following code will be generated:</p>
+<pre><code class="language-R">library(survival)
+library(survminer) 
+df &lt;- data.frame(
+time=c(1.84,1.84,0.92,2.88,2.36,3.92,3.92,5.00,5.00,5.71,5.71,5.71,5.71,5.36,6.60,6.60,6.60,6.15,7.26,7.26,6.76,6.93,7.09,8.49,9.25,10.14,10.14,10.14,10.14,10.14,9.70,10.80,10.80,11.89,11.89,11.35,12.55,12.55,12.55,13.25,13.25,13.25,12.90,13.92,13.59,14.67,14.67,15.28,15.28,16.84,15.80,16.32,18.68,18.68,18.68,18.68,18.68,20.05,20.05,20.94,20.94,22.31,23.87,23.87,23.09,25.14,25.80,26.65,26.08,26.37,29.15,27.27,27.90,28.52,30.85,32.17,42.12,37.14,46.81,51.51,0.80,0.80,0.80,0.80,1.56,1.56,3.11,4.25,4.25,4.25,4.25,4.25,4.25,4.25,4.25,3.30,3.49,3.68,3.87,4.06,4.86,4.86,4.86,5.38,5.38,5.38,5.38,6.65,6.65,6.65,7.22,7.22,7.22,8.25,8.25,8.25,8.68,8.68,9.20,9.20,9.20,9.20,8.94,9.58,9.58,9.58,9.58,9.58,10.42,10.42,10.42,10.42,11.42,10.92,13.82,13.82,13.82,13.82,12.62,15.80,15.80,15.80,15.80,15.80,15.80,14.81,17.74,18.82,20.00,23.58,26.23,27.55,29.29,31.98,34.01,38.40,46.18,40.99,43.59,55.66),
+status=c(1,1,0,1,0,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,0,0,0,1,1,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,0,0,1,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0),
+group=c(&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib+BEV&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;,&quot;Erlotinib&quot;)
+)
+survival_data &lt;- Surv(time = df$time, event = df$status)
+fit &lt;- coxph(survival_data ~ group, data = df)
+df$group &lt;- as.factor(df$group)
+df$group &lt;- relevel(df$group, ref = &quot;Erlotinib&quot;)
+summary_info &lt;- summary(fit)
+hr &lt;- summary_info$conf.int[1, &quot;exp(coef)&quot;]
+lhr &lt;- summary_info$conf.int[1, &quot;lower .95&quot;]
+rhr &lt;- summary_info$conf.int[1, &quot;upper .95&quot;]
+print(paste(round(hr,3),&quot;[&quot;,round(lhr,3),&quot;-&quot;,round(rhr,3),&quot;]&quot;))
+
+</code></pre>
+                        <p>The generated code above can be directly executed in R to obtain the Hazard Ratio for the specified groups.</p> <p><strong>Note on Data Loading:</strong> The system has <strong>automatically optimized</strong> the script based on sample size. If the code is generated to load data via an external file (for large datasets), please ensure you have downloaded the corresponding IPD <code>.csv</code> file from the <strong>"Reconstruction Results"</strong> module and placed it in your R working directory before execution.</p>
+<pre><code class="language-R">library(survival)
+library(survminer) 
+# Load CSV files
+df1 &lt;- read.csv(&quot;The directory where the Erlotinib.csv file is located/Erlotinib+BEV.csv&quot;,header=TRUE) #For example, D:/project/Erlotinib+BEV.csv
+df2 &lt;- read.csv(&quot;The directory where the Erlotinib.csv file is located/Erlotinib.csv&quot;,header=TRUE) #For example, D:/project/Erlotinib.csv
+# Combine the loaded groups into a single dataframe
+df &lt;- rbind(df1,df2)
+
+df$group &lt;- as.factor(df$group)
+# Note: Modify the reference group name below
+df$group &lt;- relevel(df$group, ref = &quot;Erlotinib&quot;)
+
+survival_data &lt;- Surv(time = df$time, event = df$status)
+fit &lt;- coxph(survival_data ~ group, data = df)
+
+summary_info &lt;- summary(fit)
+hr &lt;- summary_info$conf.int[1, &quot;exp(coef)&quot;]
+lhr &lt;- summary_info$conf.int[1, &quot;lower .95&quot;]
+rhr &lt;- summary_info$conf.int[1, &quot;upper .95&quot;]
+print(paste(round(hr,3),&quot;[&quot;,round(lhr,3),&quot;-&quot;,round(rhr,3),&quot;]&quot;))
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,0 +1,1451 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KM-PoPiGo - Reconstruction IPD from KM Curve Images</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/default.min.css">
+    <style>
+        body {
+            background-color: #efefef;
+            padding: 0 0px;
+            margin: 0;
+        }
+
+        #mainNav {
+            display: inline-block;
+            float: right;
+            margin-top: 10px;
+        }
+
+        #mainNav li {
+            display: inline-block;
+            font-weight: bold;
+            color: #f7f7f7;
+            border-right: 2px solid #f7f7f7;
+            margin-left: 20px;
+            padding-right: 20px;
+        }
+
+        #sq-form-ul {
+            padding: 5px;
+            text-align: justify;
+        }
+
+        #sq-form-ul li {
+            list-style: none;
+            margin: 0;
+            padding: 8px;
+        }
+
+        .toolBT {
+            cursor: pointer;
+            border-radius: 3px;
+            padding: 10px;
+            background-color: #f7f7f7;
+            border: 1px solid #aaaaaa;
+            font-weight: bold;
+        }
+
+        .toolBT:hover {
+            background-color: #aaaaaa;
+        }
+
+        .toolBT:active {
+            background-color: #aaaa66;
+        }
+        .selectedBT{
+            cursor: pointer;
+            border-radius: 3px;
+            padding: 10px;
+            background-color: #f7f7f7;
+            font-weight: bold;
+            background-color: #aaaa66;
+        }
+        .selectedBT:hover {
+            background-color: #aaaaaa;
+        }
+
+        .selectedBT:active {
+            background-color: #aaaa66;
+        }
+        .seqnum {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            background-color: #333333;
+            text-align: center;
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+
+        .sq-table {
+            font-size: 14px;
+            border-right: 1px solid #888;
+            border-bottom: 1px solid #888;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        .sq-table td {
+            border-left: 1px solid #888;
+            border-top: 1px solid #888;
+            padding: 5px;
+        }
+
+        .resultBT {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #8c315e;
+            color: #FFF;
+        }
+
+        .resultBT:hover {
+            transition: 0.5s;
+            background-color: #b96265;
+        }
+
+        #reconstructWindow {
+            display: none;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            width: 450px;
+            background-color: #000;
+            color: #FFF;
+            font-size: 18px;
+            font-weight: bold;
+            overflow: scroll;
+            z-index: 10000;
+            left: 200px;
+            top: 400px;
+        }
+
+        .allgroup {
+
+        }
+
+        .allgroup li {
+            display: inline-block;
+            padding: 10px;
+            background-color: #dde0d3;
+            margin: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .loadUL{
+            position: absolute;
+            left: 0;
+            top:-35px;
+            color: #FFF;
+        }
+        .loadUL li{
+            display: inline-block;
+            margin: 3px;
+            padding: 8px 12px;
+            line-height: 16px;
+            background-color: #b96265;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        a {
+            color: #f7f7f7;
+        }
+        .haspointul {
+            padding-left: 20px;
+        }
+        .haspointul li{
+            list-style: square;
+        }
+        .sqclose {
+            cursor: pointer;margin-left: 5px;padding: 3px 5px;
+        }
+        .sqclose :hover{
+            color: #07c160;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div style="background-color: #2F4056;position: relative;height: 80px;">
+    <div style="display: inline-block;font-size: 32px;color: #FFF;font-weight: bold;position: absolute;top: 10px;left: 20px;width: 300px;">
+        <img src="img/logo.png" style="width: 130px;" />
+        <span style="font-size: 12px;position: absolute;bottom: 5px;left: 10px;color: #2D93CA;top:50px;">Version 1.0.2-beta.2</span></div>
+    <ul id="mainNav" style="margin-top: 10px;">
+        <li style="cursor: none;color: #07c160;">Reconstructor</li>
+        <li style="cursor:pointer;" onclick="$('#trainwindow').show()">Example Cases</li>
+        <li><a href="doc/index.html" target="_blank">Documentation</a></li>
+        <li style="border-right: 0px;"><a href="#">Benchmark Dataset</a></li>
+    </ul>
+</div>
+<div style="position: absolute;background-color: #FFF;left:0px;top:80px;width: 270px;
+bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);">
+
+    <ul id="sq-form-ul">
+        <li>
+            <div class="toolBT reconBT" onclick="upload()">
+                <div class="seqnum" style="">1</div>
+                Import KM Image
+            </div>
+            <input type="file" id="fileInput" style="display: none;">
+        </li>
+        <li>
+            <div class="toolBT reconBT" onclick="$('#atriskwindow').show()" id="atriskBT">
+                <div class="seqnum" style="">2</div>
+                Set Study Parameters
+            </div>
+        </li>
+        <li style="position: relative;">
+            <div class="toolBT reconBT" onclick="setZero()">
+                <div class="seqnum" style="">3</div>
+                Calibrate Origin (0,0)
+            </div>
+            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;position: absolute;right: 0;top:20px;"
+                 onclick="showOrigin()">?</div>
+        </li>
+        <li style="position: relative;">
+            <div class="toolBT reconBT" onclick="setMax()">
+                <div class="seqnum" style="">4</div>
+                Calibrate Axis Limits
+            </div>
+            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;position: absolute;right: 0;top:20px;"
+                 onclick="showMax()">?</div>
+        </li>
+        <li>
+            <div class="toolBT reconBT" onclick="setSplit()"
+                 title="Mark the key points of the KM curve and verify that the real-time green trace accurately overlays the original line.">
+                <div class="seqnum" style="">5</div>
+                Mark Key Points
+            </div>
+        </li>
+        <li>
+            <div class="toolBT reconBT" onclick="setCensor()"
+                 title="Mark censoring times on the KM curve. Left-click to add; Right-click to delete.">
+                <div class="seqnum" style="">6</div>
+                Mark Censoring Times
+            </div>
+        </li>
+        <li>
+            <div class="toolBT reconBT" onclick="confirm()"
+                 title="Run IPD reconstruction using genetic algorithms. Estimated reconstruction time: 30s–3 mins depending on the number of points.">
+                <div class="seqnum" style="">7</div>
+                Run Reconstruction
+            </div>
+        </li>
+        <li style="display: none;">
+            Maximum X-axis : <strong id="rightLabel"></strong>
+        </li>
+        <li style="display: none;"><input id="leftx" value="0" style="width: 30px;padding: 8px;">，
+            <input id="lefty" value="0" style="width: 30px;padding: 8px;"></li>
+        <li style="display: none;"><input id="rightx" value="" style="width: 30px;padding: 8px;">，
+            <input id="righty" value="1" style="width: 30px;padding: 8px;"></li>
+        <li style="display: none;">Maxtime：<input id="maxmonth" value="" style="width: 30px;padding: 8px;"></li>
+        <li>
+            <div class="toolBT resultBT" onclick="showAllResults()" title="View and export the history of reconstructed IPD datasets."
+                 style="position: relative;">
+                <div style="position: absolute;right: -5px;top:-5px;">
+                    <div id="resultNum" class="seqnum" style="background-color: #FF0000;">0</div>
+                </div>
+                Reconstruction Results
+            </div>
+        </li>
+        <li>
+            <div class="toolBT resultBT" onclick="showRcodeWindow()" title="Select IPD datasets to generate R scripts for KM plotting and survival analysis."
+                 style="position: relative;background-color: #97b99c;">
+                Generate R Code
+            </div>
+        </li>
+    </ul>
+<div style="margin: 10px;padding: 10px;background-color: #ffdade;">
+    In the 'Mark Key Points' or 'Mark Censoring Times' mode, use the left mouse button to add points and the right mouse button to delete the point under the cursor.
+</div>
+<!--    <div style="padding: 10px;"><button class="layui-btn" onclick="localStorage.clear()">Clear All Results</button></div>-->
+</div>
+<div style="margin: 0 auto;position: absolute;right: 5px;top: 80px;left: 275px;">
+    <ul class="loadUL">
+        <li onclick="downloadInfo()"><i class="layui-icon layui-icon-download-circle"> Save Project</i></li>
+        <li onclick="uploadInfo()"><i class="layui-icon layui-icon-upload-circle"> Load Project</i></li>
+        <input type="file" id="jsonFile" accept=".json" style="display: none;">
+    </ul>
+    <div class="sq-box" style="">
+        <div class="sq-lm" style="position: relative;">
+            <div style="position: absolute;right: 0;top:-30px;z-index: 10000;">
+                <button style="background-color: #cb004c;cursor: pointer;" type="button" class="layui-btn layui-btn-sm layui-btn-normal"
+                        onclick="clearPointsAndCensors()" title="Switch between the research group and the control group">
+                    <i class="layui-icon layui-icon-delete"> Clear All Break Points and Censoring Times</i>
+                </button>
+            </div>
+            <div style="overflow: hidden;position: relative;" id="canvasBox">
+
+                <canvas id="canv" style="background-color: #FFF;position: absolute;left: 0;top:0;"></canvas>
+                <canvas id="blue" style="position: absolute;left: 0;top:0;z-index: 1000;"></canvas>
+                <div style="position: absolute;bottom: 10px;right: 20px;font-weight: bold;color: #333333;">KM-PoPi tool</div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div id="atriskwindow"
+     style="position:absolute;min-width: 500px;background-color: #efefef;top: 150px;left: 200px;z-index: 100000;display: none;">
+    <div style="text-align: center;font-size: 18px;font-weight: bold;padding: 10px;">At Risk</div>
+    <div onclick="$('#atriskwindow').hide()" style="position: absolute;right: 10px;top:10px;">
+        <div class="layui-badge sqclose">
+            <i class="layui-icon layui-icon-close" style="font-size: 14px; color: #FFFFFF;"></i>
+        </div>
+    </div>
+    <div style="margin: 10px;padding:10px;background-color: #FFF;">
+        <div>Time Interval:<input id="timeseq" class="layui-input" style="display: inline-block;width: 80px;margin-left: 5px;">
+            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;" onclick="layui.layer.msg('If the X-axis values are 0, 6, 12, 18, and so on, then the time interval on the X-axis is 6.')">?</div>
+        </div>
+        <div style="margin-top: 10px;">Numbers At Risk:<input id="atrisk" class="layui-input"
+                                                          style="display: inline-block;width: 440px;margin-left: 5px;">
+            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;" onclick="ahelp()">?</div>
+        </div>
+        <div style="padding: 20px;background-color: #efefef;margin-top: 10px;">
+            If the At-risk Table is unavailable, please leave the input fields blank. If available, enter the data and click 'OK' to generate the table.
+        </div>
+        <div style="margin-top: 10px;">
+            <button class="layui-btn" onclick="showAtRisk()">OK</button>
+        </div>
+        <div style="margin-top: 10px;font-weight: bold;text-align: center;">At-risk Table</div>
+        <table class="layui-table">
+            <tbody id="atrisktbody">
+
+            </tbody>
+        </table>
+    </div>
+    <div style="margin: 10px;padding:10px;background-color: #FFF;">
+        <div style="margin-top: 10px;">Sample Size:<input id="total" class="layui-input"
+                                                           style="display: inline-block;width: 140px;margin-left: 5px;"
+                                                           value="0">
+            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;"
+                 onclick="layui.layer.msg('Sample size of the current group.')">?</div>
+        </div>
+        <div style="margin-top: 10px;">Number of Events:<input id="events" class="layui-input"
+                                                           style="display: inline-block;width: 140px;margin-left: 5px; "
+                                                           value="0">
+            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;"
+                 onclick="layui.layer.msg('Numbers of event of the current group.')">?</div>
+        </div>
+    </div>
+    <div style="margin: 10px;padding:10px;background-color: #FFF;">
+        <div style="margin-top: 10px;">Group Name:<input id="groupname" class="layui-input"
+                                                           style="display: inline-block;width: 140px;margin-left: 5px;"
+                                                           value="Group">
+            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;"
+                 onclick="layui.layer.msg('The group name of the current group must not conflict with the names of the groups that have already been saved.')">?</div>
+        </div>
+    </div>
+
+</div>
+<div id="ipdresultWindow"
+     style="position:absolute;min-width: 500px;background-color: #efefef;top: 150px;left: 300px;z-index: 100000;bottom:0;overflow:scroll;display: none;right: 300px;">
+    <div onclick="$('#ipdresultWindow').hide()" style="position: absolute;right: 0px;top:10px;">
+        <div class="layui-badge sqclose">
+            <i class="layui-icon layui-icon-close" style="font-size: 14px; color: #FFFFFF;"></i>
+        </div>
+    </div>
+    <div style="padding: 10px;margin-top: 20px;">
+        <ul class="allgroup" id="allgroup"></ul>
+        <div id="downloadcsvdiv" style="padding: 10px;text-align: right;display: none;"><button class="layui-btn layui-btn-sm" onclick="downloadCSV()">Download to CSV</button></div>
+        <table class="layui-table">
+            <thead>
+            <td>Time</td>
+            <td>Status</td>
+            <td>Group</td>
+            </thead>
+            <tbody id="curipd">
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div id="reconstructWindow" style="">
+    <div onclick="$('#reconstructWindow').hide()" style="position: absolute;right: 10px;top:10px;">
+        <div class="layui-badge sqclose">
+            <i class="layui-icon layui-icon-close" style="font-size: 14px; color: #FFFFFF;"></i>
+        </div>
+    </div>
+    <div style="padding-bottom: 10px;font-size: 22px;text-align: center;">Iteration Round<span id="epoch"
+                                                                                    style="color: #07c160;margin-left: 5px;"></span>
+    </div>
+    <div id="hrValue">
+
+    </div>
+</div>
+<div id="rCodeWindow"
+     style="position:absolute;min-width: 500px;background-color: #efefef;top: 150px;left: 280px;z-index: 100000;bottom:0;display: none;">
+    <div onclick="$('#rCodeWindow').hide()" style="position: absolute;right: 10px;top:10px;">
+        <div class="layui-badge sqclose">
+            <i class="layui-icon layui-icon-close" style="font-size: 14px; color: #FFFFFF;"></i>
+        </div>
+    </div>
+    <div style="padding: 20px;">
+        <div style="padding: 10px 0;">Select the R code to generate：
+            <select id="codeSelect">
+                <option value="hr">Hazard Ratio</option>
+                <option value="ms">Median & Survival Probability</option>
+                <option value="km">Kaplan-Meier Curves</option>
+            </select>
+        </div>
+        <div>
+            Choose group：
+        </div>
+        <ul class="allgroup" id="allgroupCode"></ul>
+        <div id="refgroupdiv" style="padding: 10px;text-align: left;">
+            Please select the reference group:
+        </div>
+        <ul class="allgroup" id="selectedgroup"></ul>
+        <pre style="position: relative;">
+        <div onclick="copyCode()" style="position: absolute;right: 0;top: 0;background-color: #eddad0;font-weight: bold;border-radius: 3px;padding: 8px;cursor: pointer;">Copy</div>
+          <code class="language-r hljs" style="background-color: #FFFFFF;width: 500px;height:500px;overflow: scroll;margin-top: 5px;" id="rcode">
+
+          </code>
+        </pre>
+    </div>
+
+</div>
+<div id="trainwindow"
+     style="position:absolute;min-width: 600px;background-color: #efefef;top: 30px;right: 0px;z-index: 100000;display: none;padding: 20px;">
+    <div style="text-align: center;font-size: 18px;font-weight: bold;padding: 10px 10px 0 10px;">Please select a case for modification and reconstruction</div>
+    <div onclick="$('#trainwindow').hide()" style="position: absolute;right: 10px;top:10px;">
+        <div class="layui-badge sqclose" style="">
+            <i class="layui-icon layui-icon-close" style="font-size: 14px; color: #FFFFFF;"></i>
+        </div>
+    </div>
+    <div style="padding: 10px;">
+    <div style="padding-top: 10px;line-height: 24px;">
+        <p>Each Kaplan-Meier plot corresponds to one of the 7 condition combinations. Selecting a specific combination will directly load the corresponding plot, data points, and condition information. Specifically:</p>
+        <ul class="haspointul">
+            <li><strong>P</strong> represents the breakpoint information.</li>
+            <li><strong>E</strong> represents the Event.</li>
+            <li><strong>A</strong> represents the At Risk.</li>
+            <li><strong>C</strong> represents the Censor.</li>
+        </ul>
+        <p>For example, the combination <strong>PEAC</strong> indicates a condition where breakpoint information (P), Event (E), At Risk (A), and Censor (C) are all included.</p>
+
+    </div>
+    <table class="layui-table" >
+        <tr>
+            <td>Image</td>
+            <td>Group</td>
+            <td>PEAC</td>
+            <td>PEA</td>
+            <td>PEC</td>
+            <td>PAC</td>
+            <td>PE</td>
+            <td>PA</td>
+            <td>PC</td>
+            <td>P</td>
+        </tr>
+        <tr>
+            <td rowspan="2"><img src="train/train1/moni.png" style="height: 100px;"></td>
+            <td>High</td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEAC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEA')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PAC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PE')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PA')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_P')">load</button></td>
+        </tr>
+        <tr>
+            <td>Low</td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEAC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEA')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PAC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PE')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PA')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_P')">load</button></td>
+        </tr>
+        <tr>
+            <td rowspan="2"><img src="train/train2/moni.png" style="height: 100px;"></td>
+            <td>High</td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEAC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEA')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PAC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PE')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PA')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_P')">load</button></td>
+        </tr>
+        <tr>
+            <td>Low</td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEAC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEA')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PAC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PE')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PA')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PC')">load</button></td>
+            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_P')">load</button></td>
+        </tr>
+    </table>
+    </div>
+</div>
+<script src="layui/layui.js"></script>
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/math.min.js"></script>
+<script src="js/highlight/highlight.min.js"></script>
+<script src="js/highlight/r.min.js"></script>
+<script src="js/calHR.js"></script>
+<script src="js/mouseDown.js"></script>
+<script src="js/mouseMove.js"></script>
+<script src="js/reconstruct.js"></script>
+<script src="js/single/evaluateFun.js"></script>
+<script src="js/single/solve.js"></script>
+<script src="js/single/selectGoodParent.js"></script>
+<script src="js/single/nextGeneration.js"></script>
+<script>
+    function setZero() {
+        layer.msg("Please click on the (0,0) point of the Kaplan-Meier curve axis.")
+        setDrawType('zero')
+    }
+
+    function setMax() {
+        layui.use(['layer'], function () {
+            let layer = layui.layer
+            layer.prompt({
+                title: 'Please enter the maximum recognizable scale on the X-axis',
+                formType: 0,
+                btn : ["OK","Close"],
+                shadeClose : true,
+                shade: 0.3, // 可选：设置遮罩透明度
+            }, function (text, index) {
+                layer.close(index);
+                $("#rightx").val(text);
+                $("#rightLabel").html(text);
+                setDrawType('confirmRight')
+            });
+        });
+    }
+
+    function setSplit() {
+        layer.msg("Please select a breakpoint of the KM curve you wish to reconstruct.")
+        setDrawType("blue");
+    }
+
+    function setCensor() {
+        layer.msg("Please select a countable censored point of the KM curve you wish to reconstruct.")
+        setDrawType("censorBlue");
+    }
+
+    function setControl() {
+        layer.msg("Please select the point where the dividing line intersects with the Control group.")
+        setDrawType("red");
+    }
+
+    function setDrawType(dtype) {
+        console.warn(dtype)
+        drawType = dtype;
+    }
+
+    function loadImage(src) {
+
+        var img = new Image();
+        img.src = src;
+        img.onload = function (e) {
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, c.width, c.height);
+        }
+    }
+
+    const fileInput = document.getElementById('fileInput');
+
+    function upload() {
+        fileInput.click();
+    }
+
+    // 文件输入的change事件处理函数
+    fileInput.addEventListener('change', function () {
+        // 获取选中的文件
+        const files = fileInput.files;
+        if (files.length > 0) {
+            const file = files[0];
+            // 确保文件是图片
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            // 使用FileReader读取图片文件
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                // 创建一个新的Image对象
+                const img = new Image();
+                img.onload = function () {
+                    // 将图片绘制到canvas上
+                    ctx.drawImage(img, 0, 0, c.width, c.height);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    $("#codeSelect").change(function (){
+       let curtype = $("#codeSelect").val();
+        $("#selectedgroup").empty();
+        $("#rcode").empty();
+        if(curtype == "hr"){
+            $("#refgroupdiv").show();
+            $("#selectedgroup").show();
+        }else{
+            $("#refgroupdiv").hide();
+            $("#selectedgroup").hide();
+        }
+
+        codeDict = {};
+    })
+    function setGroupColor(){
+        let groupli =  $("#allgroupCode li");
+        for(let i=0;i<groupli.length;i++){
+            if(codeDict[$(groupli[i]).text()]){
+                $(groupli[i]).css("background-color","#333");
+                $(groupli[i]).css("color","#FFF");
+            }else{
+                $(groupli[i]).css("background-color","#dde0d3");
+                $(groupli[i]).css("color","#333333");
+            }
+        }
+    }
+</script>
+<!--绘制蓝色线条-->
+<script>
+    let gaData = {isend:true};
+    let sunimgid = 0;
+    let groupLabel = "";
+    let totalnum = "";
+    let posList_blue = [];
+    let plist_blue = [];
+    let tlist_blue = [];
+    let atRiskArray = [];
+    let sureCensor = [];
+    let totalevents = 0;
+    let maxtime = 0;
+    let solutionValue = "";
+    let optimalsolution = "";
+    let resultArray = localStorage.getItem("result") ? JSON.parse(localStorage.getItem("result")) : []
+    let codeDict = {}
+    let refgroup = "";
+    let selectedGroup = "";
+    //以下为取点相关的初始化
+
+    $("#canvasBox").css("height", window.innerHeight - 75 + "px")
+    let c = document.getElementById("canv");
+    let ctx = c.getContext("2d");
+    c.width = window.innerWidth - 200;
+    c.height = window.innerHeight - 75;
+    let blue = document.getElementById("blue");
+    let ctx_blue = blue.getContext("2d");
+    blue.width = c.width;
+    blue.height = c.height;
+
+    let drawType = ""
+    let split_array = [];
+
+    // 删失点坐标
+    let censorPointList = [];
+    let zero = {x: 0, y: 0}
+    let maxY = {x: 0, y: 0}
+
+
+    function clearLines() {
+        posList_blue = []
+        plist_blue = [];
+        tlist_blue = [];
+        censorPointList = [];
+        sureCensor = [];
+        atRiskArray = [];
+        $("#ipdTbody").empty();
+        $("#atRiskTbody").empty();
+        $("#Atbody").empty();
+    }
+
+    function downloadInfo(){
+        let downloadJson = {
+            posList : posList_blue,
+            censorPointList : censorPointList,
+            zero : zero,
+            maxY : maxY,
+            maxYtime : $("#rightx").val(),
+            groupname : $("#groupname").val(),
+            timeseq : $("#timeseq").val(),
+            atrisk : $("#atrisk").val(),
+            total : $("#total").val(),
+            events : $("#events").val(),
+            c_width : c.width,
+            c_height : c.height
+        }
+        const canvasData = c.toDataURL('image/png');
+        downloadJson.canvas = canvasData;
+        // 将JSON对象转换为字符串
+        const jsonString = JSON.stringify(downloadJson, null, 2);
+        // 创建一个Blob对象，类型为text/plain
+        const blob = new Blob([jsonString], { type: 'text/plain' });
+
+        // 创建一个指向该Blob的URL
+        const url = URL.createObjectURL(blob);
+
+        // 创建一个隐藏的<a>元素用于下载
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'data_with_canvas.json'; // 设置文件名
+        document.body.appendChild(a);
+        a.click();
+
+        // 清理
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    function uploadInfo(){
+        document.getElementById('jsonFile').click();
+    }
+    document.getElementById('jsonFile').addEventListener('change', function() {
+        const file = this.files[0];
+
+        if (!file) {
+            alert('No file selected.');
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            try {
+                const jsonString = e.target.result;
+                const jsonData = JSON.parse(jsonString);
+                posList_blue = jsonData.posList;
+                censorPointList = jsonData.censorPointList;
+                zero = jsonData.zero;
+                maxY = jsonData.maxY;
+                $("#rightx").val(jsonData.maxYtime);
+                $("#groupname").val(jsonData.groupname);
+                $("#timeseq").val(jsonData.timeseq);
+                $("#atrisk").val(jsonData.atrisk);
+                $("#total").val(jsonData.total);
+                $("#events").val(jsonData.events);
+                $("#canvasBox").css("height", jsonData.c_height + "px")
+                c.width = jsonData.c_width;
+                c.height = jsonData.c_height;
+                blue.width = c.width;
+                blue.height = c.height;
+                ctx = c.getContext("2d");
+                const img = new Image();
+                img.src = jsonData.canvas;
+                img.onload = function() {
+                    // 将图像绘制到Canvas上
+                    ctx.drawImage(img, 0, 0, jsonData.c_width, jsonData.c_height);
+                };
+                showAtRisk(true);
+                refreshPoint();
+                drawInforLine();
+
+            } catch (error) {
+                alert('Error reading the JSON file: ' + error.message);
+            }
+        };
+
+        reader.onerror = function() {
+            alert('Error reading the file.');
+        };
+
+        reader.readAsText(file);
+    });
+
+    // 加载本地JSON文件
+    function loadTrain(filename){
+        $("#trainwindow").hide();
+        fetch(filename+'.json') // 替换为你的 JSON 文件路径
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // 解析 JSON 数据
+            })
+            .then(data => {
+                // 处理加载到的 JSON 数据
+                const jsonData = data;
+                posList_blue = jsonData.posList;
+                censorPointList = jsonData.censorPointList;
+                zero = jsonData.zero;
+                maxY = jsonData.maxY;
+                $("#rightx").val(jsonData.maxYtime);
+                $("#groupname").val(jsonData.groupname);
+                $("#timeseq").val(jsonData.timeseq);
+                $("#atrisk").val(jsonData.atrisk);
+                $("#total").val(jsonData.total);
+                $("#events").val(jsonData.events);
+                $("#canvasBox").css("height", jsonData.c_height + "px")
+                c.width = jsonData.c_width;
+                c.height = jsonData.c_height;
+                blue.width = c.width;
+                blue.height = c.height;
+                ctx = c.getContext("2d");
+                const img = new Image();
+                img.src = jsonData.canvas;
+                img.onload = function() {
+                    // 将图像绘制到Canvas上
+                    ctx.drawImage(img, 0, 0, jsonData.c_width, jsonData.c_height);
+                };
+                showAtRisk();
+                refreshPoint();
+                drawInforLine();
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+                document.getElementById('result').textContent = 'Load failed, please check the path or network.';
+            });
+    }
+    function clearPointsAndCensors(){
+        layer.confirm("Are you sure you want to clear all breakpoints and censoring points?", {
+            btn: ['Confirm', 'Close'] //按钮
+        }, function () {
+            posList_blue = [];
+            censorPointList = [];
+            drawInforLine();
+            layer.closeAll();
+        }, function () {
+            layer.closeAll();
+        });
+
+    }
+</script>
+<script>
+    function confirm(){
+        totalnum = parseInt($("#total").val());
+        totalevents = parseInt($("#events").val());
+        if (!totalnum) {
+            return layui.layer.msg("Please enter the correct Sample Size of subjects!");
+        }
+        if (plist_blue.length < 2) {
+            return layui.layer.msg("Please select the breakpoints for the KM curve you want to reconstruct IPD for!");
+        }
+        if (maxtime < tlist_blue[tlist_blue.length - 1]) {
+            return layui.layer.msg("The point selection method may be incorrect, please refer to the correct point selection method!");
+        }
+
+        layer.confirm('Please confirm whether the Numbers At Risk, Sample Size, Numbers of Event, and Group Name in the Input Condition Data correspond to the reconstructed curves.', {
+            btn: ['Confirm', 'Close'] //按钮
+        }, function () {
+                layer.confirm('No issues found. Proceed with the reconstruction of the IPD data now?', {
+                    btn: ['Confirm', 'Close'] //按钮
+                }, function () {
+                    toSolve()
+                    layer.closeAll();
+                }, function () {
+                    layer.closeAll();
+                });
+        }, function () {
+            layer.closeAll();
+        });
+    }
+    function toSolve() {
+
+        totalnum = parseInt($("#total").val());
+        totalevents = parseInt($("#events").val());
+
+        if (!totalnum) {
+            return layui.layer.msg("Please enter the correct sample size of subjects!");
+        }
+        if (plist_blue.length < 2) {
+            return layui.layer.msg("Please select the breakpoints for the KM curve you want to reconstruct IPD for!");
+        }
+        if (maxtime < tlist_blue[tlist_blue.length - 1]) {
+            return layui.layer.msg("The point selection method may be incorrect, please refer to the correct point selection method!");
+        }
+
+        if (localStorage[$("#groupname").val()]) {
+            $("#atriskwindow").show();
+            $("#groupname").focus();
+            return layui.layer.msg("This group name has already been set, please choose a different group name!");
+
+        }
+        groupLabel = $("#groupname").val();
+
+        $('#reconstructWindow').show();
+        // return console.log([groupLabel,
+        //     totalnum,
+        //     totalevents,
+        //     posList_blue,
+        //     plist_blue,
+        //     tlist_blue,
+        //     atRiskArray,
+        //     sureCensor,
+        //     maxtime])
+        if(gaData.isend){
+            reconstructIPD(
+                groupLabel,
+                totalnum,
+                totalevents,
+                posList_blue,
+                plist_blue,
+                tlist_blue,
+                atRiskArray,
+                sureCensor,
+                maxtime
+            )
+        }else{
+
+        }
+
+    }
+</script>
+<script>
+    function saveSolution() {
+        if (groupLabel == "") {
+            groupLabel = "Group"
+        }
+        let ipd = JSON.stringify(getIPD_R_Table(getIPD(gaData.minPopulation, groupLabel)));
+        resultArray.push(groupLabel);
+        localStorage.setItem("result", JSON.stringify(resultArray));
+        localStorage.setItem(groupLabel, ipd);
+        showAllResults();
+        $("#reconstructWindow").hide();
+    }
+
+    function getIPD(p10, groupLabel) {
+        let ipdArray = [];
+        for (let i = 1; i < tlist_blue.length; i++) {
+            console.warn([p10[1][i - 1], "1"])
+            for (let j = 0; j < p10[1][i - 1]; j++) {
+                ipdArray.push([groupLabel, 1, tlist_blue[i]])
+            }
+            let interval = (tlist_blue[i] - tlist_blue[i - 1]) / (p10[0][i - 1] + 1);
+            let integrationTime = 0;
+            console.warn([p10[0][i - 1], "0"])
+            for (let j = 0; j < p10[0][i - 1]; j++) {
+                integrationTime += interval;
+                ipdArray.push([groupLabel, 0, tlist_blue[i - 1] + integrationTime])
+            }
+        }
+        for (let i = 0; i < p10[2]; i++) {
+            let interval = (maxtime - tlist_blue[tlist_blue.length - 1]) / p10[2];
+            ipdArray.push([groupLabel, 0, (tlist_blue[tlist_blue.length - 1] + interval * (i + 1))])
+        }
+        return ipdArray
+    }
+
+    function getIPD_R_Table(ipd) {
+        let ipdTable = [];
+        ipd.forEach(function (value) {
+            ipdTable.push({label: value[0], dead: value[1], time: value[2].toFixed(2)})
+        })
+        return ipdTable;
+    }
+</script>
+<script>
+    function showAtRisk(bt) {
+        if(bt){
+            return;
+        }
+        let atrisk = $("#atrisk").val().split(" ");
+        let splitnum = parseInt($("#timeseq").val());
+        atRiskArray = [];
+        let timetd = "<tr>";
+        let atrisktd = "<tr>";
+        if (splitnum) {
+            if (atrisk.length < 2) {
+                layui.layer.msg("Please enter the correct Numbers At Risk.")
+            } else {
+                atrisk.forEach(function (value, index) {
+                    atRiskArray.push([index * splitnum, parseInt(value)]);
+                    timetd += "<td>" + (index * splitnum) + "</td>";
+                    atrisktd += "<td>" + value + "</td>";
+                })
+                $("#atrisktbody").empty();
+                $("#atrisktbody").append(timetd);
+                $("#atrisktbody").append(atrisktd);
+                $("#total").val(atrisk[0])
+            }
+        } else {
+            layui.layer.msg("Please enter the correct time interval.")
+        }
+    }
+    $(".reconBT").click(function (){
+        $(".reconBT").removeClass("selectedBT")
+        $(".reconBT").addClass("toolBT")
+        $(this).addClass("selectedBT");
+
+    });
+</script>
+<script>
+    $("#resultNum").html(JSON.parse(localStorage.getItem("result")).length)
+
+    function showAllResults() {
+        $("#ipdresultWindow").show();
+        $("#allgroup").empty();
+        let allGroup = JSON.parse(localStorage.getItem("result"));
+        allGroup.forEach(function (value) {
+            $("#allgroup").append('<li style="position: relative;" onclick="showIPD(\'' + value + '\',this)">' + value + '' +
+                '<div style="cursor: pointer;position: absolute;right: -5px;top:-5px;" onclick="deleteResult(\'' + value + '\')">\n' +
+                '            <i class="layui-icon layui-icon-close" style="font-size: 12px; color: #FFFFFF;background-color: #af1a0a;"></i>\n' +
+                '        </div>' +
+                '</li>')
+        })
+        $("#resultNum").html(allGroup.length);
+    }
+
+    function deleteResult(groupName) {
+        layer.confirm('Are you sure you want to delete ' + groupName + '?', {
+            btn: ['Confirm', 'Close'] //按钮
+        }, function () {
+            localStorage.removeItem(groupName);
+            let groupArray = JSON.parse(localStorage.getItem("result"));
+            let index = groupArray.indexOf(groupName);
+            if (index > -1) {
+                groupArray.splice(index, 1);
+            }
+            localStorage.setItem("result", JSON.stringify(groupArray));
+
+            showAllResults()
+            layer.closeAll();
+        }, function () {
+            layer.closeAll();
+        });
+    }
+
+    function showIPD(groupName,obj) {
+        $("#allgroup li").css("background-color","#dde0d3");
+        $("#allgroup li").css("color","#000000");
+        $(obj).css("background-color","#333333");
+        $(obj).css("color","#eddad0");
+        if(groupName == ""){
+            return layui.layer.msg("Please select the group name you wish to download.")
+        }else{
+            $("#downloadcsvdiv").show();
+        }
+
+        selectedGroup = groupName;
+        $("#curipd").empty();
+        let ipd = JSON.parse(localStorage.getItem(groupName));
+        ipd.forEach(function (value) {
+            $("#curipd").append('<tr>' +
+                '<td>' + value.time + '</td>' +
+                '<td>' + value.dead + '</td>' +
+                '<td>' + value.label + '</td>' +
+                '</tr>')
+        })
+    }
+
+    function showRcodeWindow() {
+        $("#rCodeWindow").show();
+        $("#allgroupCode").empty();
+        let allGroup = JSON.parse(localStorage.getItem("result"));
+        allGroup.forEach(function (value) {
+            $("#allgroupCode").append('<li onclick="createCode(\'' + value + '\')">' + value + '</li>')
+        })
+
+    }
+
+    function createCode(group) {
+        switch ($("#codeSelect").val()) {
+            case "hr" :
+                if (codeDict[group]) {
+                    delete codeDict[group];
+                } else {
+                    codeDict[group] = JSON.parse(localStorage.getItem(group));
+                }
+                $("#selectedgroup").empty();
+                for (let k in codeDict) {
+                    $("#selectedgroup").append('<li onclick="changeRef(\''+k+'\')">'+k+'</li>');
+                }
+                createHR(codeDict)
+                break;
+            case "ms" :
+                codeDict = {};
+                codeDict[group] = JSON.parse(localStorage.getItem(group));
+                $("#selectedgroup").empty();
+                for (let k in codeDict) {
+                    $("#selectedgroup").append('<li onclick="changeRef(\''+k+'\')">'+k+'</li>');
+                }
+                createMS(codeDict)
+                break;
+            case "km" :
+                if (codeDict[group]) {
+                    delete codeDict[group];
+                } else {
+                    codeDict[group] = JSON.parse(localStorage.getItem(group));
+                }
+                $("#selectedgroup").empty();
+                for (let k in codeDict) {
+                    $("#selectedgroup").append('<li onclick="changeRef(\''+k+'\')">'+k+'</li>');
+                }
+                createKM(codeDict)
+                break;
+            default :
+                break;
+        }
+        setGroupColor();
+
+    }
+    function changeRef(group){
+        refgroup = group;
+        createHR(codeDict);
+    }
+    function downloadCSV(){
+        const headers = "time,status,group\n";
+        let ipd = JSON.parse(localStorage.getItem(selectedGroup));
+        let values = "";
+        ipd.forEach(function (value) {
+            values += value.time +',' + value.dead + ',"' + value.label.replace(/,/gi,"")+'"\n'
+        })
+        const csvContent = headers + values;
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.style.display = 'none';
+        link.download = selectedGroup.replace(/,/gi,"").replace(/\./gi,"").replace(/\//gi,"")+'.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+</script>
+<script>
+    function createHR(codeDict){
+        if(!codeDict[refgroup]){
+            return layui.layer.msg("Please select a reference group!")
+        }
+        let codestr = "if (!require(survival)) {\n" +
+            "  install.packages(\"survival\", dependencies = TRUE)\n" +
+            "  library(survival)\n" +
+            "}\n" +
+            "if (!require(survminer)) {\n" +
+            "  install.packages(\"survminer\", dependencies = TRUE)\n" +
+            "  library(survminer)\n" +
+            "}\n"
+        let timearray = [];
+        let statusarray = [];
+        let grouparray = [];
+        let isCsv = false;
+        let loadnum = 0;
+        for (let k in codeDict) {
+            if(codeDict[k].length < 150){
+                isCsv = true;
+            }
+        }
+        if(isCsv){
+            codestr +="#First, download the corresponding IPD data from \"Reconstruction Result,\" and then set the save path for each IPD data below.\n"
+            for (let k in codeDict) {
+                loadnum++;
+                codestr += "df"+loadnum  + " <- read.csv('D:\\project\\mycsv\\"+k+".csv')\n"
+            }
+            let dfArray = [];
+            for (let i=1; i<=loadnum;i++){
+                dfArray.push("df"+i);
+            }
+            codestr +="df <- rbind("+dfArray.join(",")+")\n"
+        }else{
+            for (let k in codeDict) {
+                codeDict[k].forEach(function (value) {
+                    timearray.push(value.time);
+                    statusarray.push(value.dead);
+                    grouparray.push(k);
+                })
+            }
+            codestr += "df <- data.frame(\n";
+            codestr += "time=c(" + timearray.join(",") + "),\n";
+            codestr += "status=c(" + statusarray.join(",") + "),\n";
+            codestr += "group=c(\"" + grouparray.join("\",\"") + "\")\n";
+            codestr += ")\n"
+        }
+
+
+
+        codestr +="df$group <- as.factor(df$group)\n" +
+            "# Note: Modify the reference group name below\n"+
+        "df$group <- relevel(df$group, ref = \""+refgroup+"\")\n" ;
+        codestr += "survival_data <- Surv(time = df$time, event = df$status)\n" +
+            "fit <- coxph(survival_data ~ group, data = df)\n" +
+
+            "summary_info <- summary(fit)\n" +
+            "hr <- summary_info$conf.int[1, \"exp(coef)\"]\n" +
+            "lhr <- summary_info$conf.int[1, \"lower .95\"]\n" +
+            "rhr <- summary_info$conf.int[1, \"upper .95\"]\n"+
+            "print(paste(round(hr,3),\"[\",round(lhr,3),\"-\",round(rhr,3),\"]\"))\n";
+        $("#rcode").text(codestr);
+        $("#rcode").removeAttr("data-highlighted")
+        hljs.highlightElement(document.getElementById("rcode"),"r");
+    }
+
+    function createMS(codeDict){
+        codestr = "if (!require(survival)) {\n" +
+            "  install.packages(\"survival\", dependencies = TRUE)\n" +
+            "  library(survival)\n" +
+            "}\n" +
+            "if (!require(survminer)) {\n" +
+            "  install.packages(\"survminer\", dependencies = TRUE)\n" +
+            "  library(survminer)\n" +
+            "}\n"
+        let timearray = [];
+        let statusarray = [];
+        let grouparray = [];
+        let isCsv = false;
+        let loadnum = 0;
+        for (let k in codeDict) {
+            if(codeDict[k].length < 150){
+                isCsv = true;
+            }
+        }
+        if(isCsv){
+            codestr +="#First, download the corresponding IPD data from \"Reconstruction Result,\" and then set the save path for each IPD data below.\n"
+            for (let k in codeDict) {
+                loadnum++;
+                codestr += "df"+loadnum  + " <- read.csv('D:\\project\\mycsv\\"+k+".csv')\n"
+            }
+            let dfArray = [];
+            for (let i=1; i<=loadnum;i++){
+                dfArray.push("df"+i);
+            }
+            codestr +="df <- rbind("+dfArray.join(",")+")\n"
+        }else{
+            for (let k in codeDict) {
+                codeDict[k].forEach(function (value) {
+                    timearray.push(value.time);
+                    statusarray.push(value.dead);
+                    grouparray.push(k);
+                })
+
+            }
+            codestr += "df <- data.frame(\n";
+            codestr += "time=c(" + timearray.join(",") + "),\n";
+            codestr += "status=c(" + statusarray.join(",") + "),\n";
+            codestr += "group=c(\"" + grouparray.join("\",\"") + "\")\n";
+            codestr += ")\n"
+        }
+
+        codestr += "survival_data <- Surv(time = df$time, event = df$status)\n" +
+            "surv_fit <- survfit(survival_data ~ group, data = df)\n" +
+            "# Calculate median survival time\n" +
+            "median_survival_time <- surv_median(surv_fit)\n"+
+        "# Set the 'time' variable to calculate the survival rate at the current point in time. For example, if the x-axis is measured in months, then a 'time' value of 12 indicates a 1-year survival rate.\n" +
+            "time <- 12\n" +
+            "survival_rate <- summary(surv_fit, times = c(time))\n" +
+            "print(paste(\"Median :\",median_survival_time$median,\"[\",median_survival_time$lower,\"-\",median_survival_time$upper,\"]\"))\n"+
+            "print(paste(time,\"Survival Rate :\",round(survival_rate$surv,3),\"[\",round(survival_rate$lower,3),\"-\",round(survival_rate$upper,3),\"]\"))\n" +
+            "print(paste(time,\"Survival Rate (%):\",round(survival_rate$surv,4)*100,\"[\",round(survival_rate$lower,4)*100,\"-\",round(survival_rate$upper,4)*100,\"]\"))";
+        $("#rcode").text(codestr);
+        $("#rcode").removeAttr("data-highlighted")
+        hljs.highlightElement(document.getElementById("rcode"),"r");
+    }
+
+    function createKM(codeDict){
+        codestr = "if (!require(survival)) {\n" +
+            "  install.packages(\"survival\", dependencies = TRUE)\n" +
+            "  library(survival)\n" +
+            "}\n" +
+            "if (!require(survminer)) {\n" +
+            "  install.packages(\"survminer\", dependencies = TRUE)\n" +
+            "  library(survminer)\n" +
+            "}\n"
+        let timearray = [];
+        let statusarray = [];
+        let grouparray = [];
+        let isCsv = false;
+        let loadnum = 0;
+        for (let k in codeDict) {
+            if(codeDict[k].length < 150){
+                isCsv = true;
+            }
+        }
+        if(isCsv){
+            codestr +="#First, download the corresponding IPD data from \"Reconstruction Result,\" and then set the save path for each IPD data below.\n"
+            for (let k in codeDict) {
+                loadnum++;
+                codestr += "df"+loadnum  + " <- read.csv('D:\\project\\mycsv\\"+k+".csv')\n"
+            }
+            let dfArray = [];
+            for (let i=1; i<=loadnum;i++){
+                dfArray.push("df"+i);
+            }
+            codestr +="df <- rbind("+dfArray.join(",")+")\n"
+        }else{
+            for (let k in codeDict) {
+                codeDict[k].forEach(function (value) {
+                    timearray.push(value.time);
+                    statusarray.push(value.dead);
+                    grouparray.push(k);
+                })
+
+            }
+            codestr += "df <- data.frame(\n";
+            codestr += "time=c(" + timearray.join(",") + "),\n";
+            codestr += "status=c(" + statusarray.join(",") + "),\n";
+            codestr += "group=c(\"" + grouparray.join("\",\"") + "\")\n";
+            codestr += ")\n"
+        }
+        codestr += "survival_data <- Surv(time = df$time, event = df$status)\n" +
+            "surv_fit <- survfit(survival_data ~ group, data = df)\n" +
+            "# Plot the survival curve.\n" +
+            "ggsurvplot(surv_fit, risk.table = TRUE, pval = TRUE,censor=TRUE)";
+        $("#rcode").text(codestr);
+        $("#rcode").removeAttr("data-highlighted")
+        hljs.highlightElement(document.getElementById("rcode"),"r");
+    }
+</script>
+<script>
+    function initMyData() {
+        groupLabel = $("#groupname").val();
+        totalnum = 100;
+        totalevents = 12;
+        posList_blue = [
+            [
+                215,
+                212
+            ],
+            [
+                300,
+                284
+            ],
+            [
+                338,
+                324
+            ],
+            [
+                368,
+                337
+            ],
+            [
+                405,
+                349
+            ],
+            [
+                450,
+                375
+            ],
+            [
+                493,
+                410
+            ],
+            [
+                630,
+                471
+            ],
+            [
+                796,
+                511
+            ],
+            [
+                1354,
+                511
+            ]
+        ];
+        plist_blue = [
+            1,
+            0.846,
+            0.721,
+            0.651,
+            0.628,
+            0.607,
+            0.562,
+            0.501,
+            0.394,
+            0.325
+        ];
+        tlist_blue = [
+            0,
+            3.61,
+            7.07,
+            8.61,
+            9.83,
+            11.33,
+            13.16,
+            14.91,
+            20.47,
+            27.21
+        ];
+        atRiskArray = [
+            [
+                0,
+                30
+            ],
+            [
+                3,
+                20
+            ],
+            [
+                6,
+                10
+            ],
+            [
+                9,
+                5
+            ],
+            [
+                12,
+                2
+            ]
+        ];
+        sureCensor = [
+            2,
+            2,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            4
+        ];
+        maxtime = 49.88;
+    }
+    function copyCode() {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText($("#rcode").text()).then(function() {
+               layui.layer.msg('已复制，请粘贴到R工具中执行！');
+            }, function(err) {
+                console.error('Async: Could not copy text: ', err);
+            });
+        } else {
+            console.log('Clipboard API not available');
+        }
+    }
+</script>
+<script>
+    function ahelp(){
+        layui.layer.alert('Please separate the Numbers at risk for the current group by spaces. For example: 128 48 32 12 6 0 0. For detailed instructions, please refer to the <a href="doc/ipd/index.html" style="color: #007DDB;" target="_blank">Documentation</a> or see the example input in the <span onclick=\"openTrainWindow()\" style="color: #FF5722;font-weight: bold;cursor: pointer;">KM Curve Case</span>.',{
+            title : "Help",
+            btn : ["OK"],
+            shadeClose : true
+        });
+    }
+    function openTrainWindow(){
+        $('#trainwindow').show()
+    }
+    function showOrigin(){
+        layui.layer.alert('<img src="doc/images/p00.png" style="width: 400px;">',{
+            title : "Help",
+            btn : ["OK"],
+            shadeClose : true,
+            shade: 0.3, // 可选：设置遮罩透明度
+            area: ['420px', '700px'] // 可选：设置弹出框大小
+        });
+    }
+    function showMax(){
+        layui.layer.alert('<img src="doc/images/maxpp.png" style="width: 700px;">',{
+            title : "Help",
+            btn : ["OK"],
+            shadeClose : true,
+            shade: 0.3, // 可选：设置遮罩透明度
+            area: ['720px', '600px'] // 可选：设置弹出框大小
+        });
+    }
+</script>
+</body>
+</html>

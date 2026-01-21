@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Project Management - KM-PoPiGo</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">KM-PoPiGo</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../index.html" class="nav-link">Introduction</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../ipd/index.html" class="nav-link">IPD Reconstruction</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../case/index.html" class="nav-link">Example Cases</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./index.html" class="nav-link">Project Management</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../datasets/index.html" class="nav-link">Benchmark Dataset</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a rel="prev" href="../case/index.html" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../datasets/index.html" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#ipd-reconstruction-retrospection-module" class="nav-link">Project Management</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#module-introduction" class="nav-link">Module Introduction</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#module-usage" class="nav-link">Module Usage</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="ipd-reconstruction-retrospection-module">Project Management</h1>
+                        <h2 id="module-introduction">Module Introduction</h2> <p>This module is dedicated to ensuring workflow continuity and result reproducibility. It allows users to archive the complete state of a reconstruction session—including the loaded image, coordinate calibration, key point markings, and parameter settings—into a project file. This ensures that any analysis can be perfectly replicated or resumed at a later time.</p> <p>The module consists of two core features:</p> <ul> <li><strong>Save Project:</strong> Serializes the current workspace into a downloadable file, preserving all user inputs and marking details.</li> <li><strong>Load Project:</strong> Restores a previously saved session, allowing users to verify historical results or continue working on an unfinished reconstruction.</li> </ul>
+<p><img alt="image-20250217092228725" src="..\images\retrospect.png" /></p>
+<h2 id="module-usage">Module Usage</h2>
+                        <p><strong>1. Saving a Session:</strong>
+
+
+                            Upon completing the reconstruction of a KM curve, click the <strong>"Save Project"</strong> button. The system will export all essential data required for IPD reconstruction into a standardized <strong>JSON file</strong>.</p> <p><strong>2. Data Utility:</strong>
+
+
+                        This file serves two primary purposes: <ul> <li><strong>Collaborative Reproduction:</strong> If the goal is simply to allow peers or reviewers to replicate your results using <strong>KM-PoPiGo</strong>, there is no need to parse the file content. Simply sharing this JSON file allows the recipient to restore the exact workspace state.</li> <li><strong>Advanced Interoperability:</strong> For users intending to process the coordinate data using external tools or custom algorithms, it is necessary to understand the internal data schema. The file structure consists of the following key components:</li> </ul> </p>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th><strong>Field</strong></th>
+                                <th><strong>Name</strong></th>
+                                <th><strong>Description</strong></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>posList</td>
+                                <td>Key Point Coordinates</td>
+                                <td>A 2D array recording the (x, y) pixel coordinates of all digitized <strong>Key Points</strong>.</td>
+                            </tr>
+                            <tr>
+                                <td>censorPointList</td>
+                                <td>Censoring Mark Coordinates</td>
+                                <td>A 2D array recording the (x, y) pixel coordinates of all marked <strong>Censoring Events</strong>.</td>
+                            </tr>
+                            <tr>
+                                <td>zero</td>
+                                <td>Origin Coordinates</td>
+                                <td>The pixel coordinates of the origin (0, 0) on the canvas, obtained via the <strong>"Calibrate Origin"</strong> operation.</td>
+                            </tr>
+                            <tr>
+                                <td>maxY</td>
+                                <td>Axis Limit Coordinates</td>
+                                <td>The pixel coordinates of the calibration point (X_max, 1.0), obtained via the <strong>"Calibrate Axis Limits"</strong> operation.</td>
+                            </tr>
+                            <tr>
+                                <td>maxYtime</td>
+                                <td>Maximum X-Axis Value</td>
+                                <td>The numerical value corresponding to the maximum scale of the X-axis (entered by the user during calibration).</td>
+                            </tr>
+                            <tr>
+                                <td>groupname</td>
+                                <td>Group Name</td>
+                                <td>The user-defined identifier for the current experimental group.</td>
+                            </tr>
+                            <tr>
+                                <td>timeseq</td>
+                                <td>At-risk Table Interval</td>
+                                <td>A single numerical value representing the fixed time step (interval) between columns in the At-risk table (e.g., 5).</td>
+                            </tr>
+                            <tr>
+                                <td>atrisk</td>
+                                <td>At-risk Numbers (R)</td>
+                                <td>The number of subjects at risk recorded corresponding to the time intervals defined by <code>timeseq</code>.</td>
+                            </tr>
+                            <tr>
+                                <td>total</td>
+                                <td>Total Sample Size (N)</td>
+                                <td>The initial number of subjects in the study group.</td>
+                            </tr>
+                            <tr>
+                                <td>events</td>
+                                <td>Number of Events (E)</td>
+                                <td>The total count of events observed during the study.</td>
+                            </tr>
+                            <tr>
+                                <td>c_width</td>
+                                <td>Image Width</td>
+                                <td>The width of the uploaded KM curve image (in pixels).</td>
+                            </tr>
+                            <tr>
+                                <td>c_height</td>
+                                <td>Image Height</td>
+                                <td>The height of the uploaded KM curve image (in pixels).</td>
+                            </tr>
+                            <tr>
+                                <td>canvas</td>
+                                <td>Image Data</td>
+                                <td>The raw image string encoded in <strong>Base64</strong> format.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p>During peer review or manuscript submission, ensuring the <strong>reproducibility</strong> of results is paramount. Users can share the exported project JSON file with reviewers to facilitate independent verification. By clicking the <strong>"Load Project"</strong> button in <strong>KM-PoPiGo</strong> and selecting the file, the system instantly restores the complete workspace state, including the original image, <strong>Key Point</strong> markings, <strong>Censoring Times</strong>, and all associated <strong>Study Parameters</strong>. Consequently, the reviewer can audit the marking precision and parameter inputs before executing the <strong>"Run Reconstruction"</strong> function to validate the final IPD output.</p>
+                    </div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
