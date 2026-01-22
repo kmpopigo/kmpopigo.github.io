@@ -2,14 +2,18 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Topic](https://img.shields.io/badge/Topic-Survival%20Analysis-blue)](https://github.com/topics/survival-analysis)
+[![Web App](https://img.shields.io/badge/Web-Live%20Demo-green)](https://kmpopigo.github.io/)
 
 ## 📖 Description
 
 **KM-PoPiGo** is a **user-friendly** and versatile tool designed for reconstructing **Individual Participant Data (IPD)** from published Kaplan-Meier (KM) survival curves. It offers flexible deployment options, running seamlessly both **Online (Web-based)** and **Offline (Local)** to suit diverse research environments.
 
+👉 **Access the Web Tool:** [https://kmpopigo.github.io/](https://kmpopigo.github.io/)
+
 Unlike traditional digitizers, KM-PoPiGo employs a **multi-constraint optimization algorithm**. It integrates **Sample size (N)**, **Events (E)**, **At-risk tables (R)**, and **Censoring (C)** to maximize reconstruction accuracy across eight distinct data scenarios (e.g., NERC, NER, N).
 
-### Key Features
+### 🚀 Key Features
+
 * **Accessible & Flexible:** Features an intuitive interface that requires no coding skills, supporting both browser-based access and secure offline local execution.
 * **High Precision:** Maximizes accuracy by utilizing available constraints (N, E, R, C) to calibrate the reconstruction algorithm.
 * **Full Workflow:** Covers image preprocessing, coordinate calibration, key point marking, and final IPD generation.
