@@ -516,7 +516,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         layui.use(['layer'], function () {
             let layer = layui.layer
             layer.prompt({
-                title: 'Please enter the maximum recognizable scale on the X-axis',
+                title: 'Please enter the maximum value on the X-axis.',
                 formType: 0,
                 btn : ["OK","Close"],
                 shadeClose : true,
@@ -531,18 +531,13 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
     }
 
     function setSplit() {
-        layer.msg("Please select a breakpoint of the KM curve you wish to reconstruct.")
+        layer.msg("Please mark key points to ensure the real-time trace aligns precisely with the original KM curve.")
         setDrawType("blue");
     }
 
     function setCensor() {
-        layer.msg("Please select a countable censored point of the KM curve you wish to reconstruct.")
+        layer.msg("Please mark identifiable censoring times on the KM curve.")
         setDrawType("censorBlue");
-    }
-
-    function setControl() {
-        layer.msg("Please select the point where the dividing line intersects with the Control group.")
-        setDrawType("red");
     }
 
     function setDrawType(dtype) {
@@ -808,7 +803,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             });
     }
     function clearPointsAndCensors(){
-        layer.confirm("Are you sure you want to clear all breakpoints and censoring points?", {
+        layer.confirm("Are you sure you want to clear all marked break points and censoring times?", {
             btn: ['Confirm', 'Close'] //按钮
         }, function () {
             posList_blue = [];
@@ -826,20 +821,20 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         totalnum = parseInt($("#total").val());
         totalevents = parseInt($("#events").val());
         if (!totalnum) {
-            return layui.layer.msg("Please enter the correct Sample Size of subjects!");
+            return layui.layer.msg("Please enter the correct Sample Size.");
         }
         if (plist_blue.length < 2) {
-            return layui.layer.msg("Please select the breakpoints for the KM curve you want to reconstruct IPD for!");
+            return layui.layer.msg("Insufficient points selected. Please mark at least two key points to define the curve.");
         }
         if (maxtime < tlist_blue[tlist_blue.length - 1]) {
-            return layui.layer.msg("The point selection method may be incorrect, please refer to the correct point selection method!");
+            return layui.layer.msg("Time Domain Mismatch: The last break point exceeds the maximum follow-up time.");
         }
 
-        layer.confirm('Please confirm whether the Numbers At Risk, Sample Size, Numbers of Event, and Group Name in the Input Condition Data correspond to the reconstructed curves.', {
-            btn: ['Confirm', 'Close'] //按钮
+        layer.confirm('Please verify that the <strong>Group Name</strong>, <strong>Sample Size</strong>, <strong>Number of Events</strong>, and <strong>At-risk Table</strong> in the \'Set Study Parameters\' section are correct. Click <strong>Confirm</strong> to start IPD reconstruction.', {
+            btn: ['Confirm', 'Cancel'] //按钮
         }, function () {
-                layer.confirm('No issues found. Proceed with the reconstruction of the IPD data now?', {
-                    btn: ['Confirm', 'Close'] //按钮
+                layer.confirm('Data confirmed. Proceed with IPD reconstruction?', {
+                    btn: ['Yes, Start', 'No'] //按钮
                 }, function () {
                     toSolve()
                     layer.closeAll();
@@ -856,19 +851,19 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         totalevents = parseInt($("#events").val());
 
         if (!totalnum) {
-            return layui.layer.msg("Please enter the correct sample size of subjects!");
+            return layui.layer.msg("Please enter the correct Sample Size.");
         }
         if (plist_blue.length < 2) {
-            return layui.layer.msg("Please select the breakpoints for the KM curve you want to reconstruct IPD for!");
+            return layui.layer.msg("Insufficient points selected. Please mark at least two key points to define the curve.");
         }
         if (maxtime < tlist_blue[tlist_blue.length - 1]) {
-            return layui.layer.msg("The point selection method may be incorrect, please refer to the correct point selection method!");
+            return layui.layer.msg("Time Domain Mismatch: The last break point exceeds the maximum follow-up time.");
         }
 
         if (localStorage[$("#groupname").val()]) {
             $("#atriskwindow").show();
             $("#groupname").focus();
-            return layui.layer.msg("This group name has already been set, please choose a different group name!");
+            return layui.layer.msg("This group name already exists. Please enter a different name.");
 
         }
         groupLabel = $("#groupname").val();
@@ -1298,112 +1293,6 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
     }
 </script>
 <script>
-    function initMyData() {
-        groupLabel = $("#groupname").val();
-        totalnum = 100;
-        totalevents = 12;
-        posList_blue = [
-            [
-                215,
-                212
-            ],
-            [
-                300,
-                284
-            ],
-            [
-                338,
-                324
-            ],
-            [
-                368,
-                337
-            ],
-            [
-                405,
-                349
-            ],
-            [
-                450,
-                375
-            ],
-            [
-                493,
-                410
-            ],
-            [
-                630,
-                471
-            ],
-            [
-                796,
-                511
-            ],
-            [
-                1354,
-                511
-            ]
-        ];
-        plist_blue = [
-            1,
-            0.846,
-            0.721,
-            0.651,
-            0.628,
-            0.607,
-            0.562,
-            0.501,
-            0.394,
-            0.325
-        ];
-        tlist_blue = [
-            0,
-            3.61,
-            7.07,
-            8.61,
-            9.83,
-            11.33,
-            13.16,
-            14.91,
-            20.47,
-            27.21
-        ];
-        atRiskArray = [
-            [
-                0,
-                30
-            ],
-            [
-                3,
-                20
-            ],
-            [
-                6,
-                10
-            ],
-            [
-                9,
-                5
-            ],
-            [
-                12,
-                2
-            ]
-        ];
-        sureCensor = [
-            2,
-            2,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            4
-        ];
-        maxtime = 49.88;
-    }
     function copyCode() {
         if (navigator.clipboard) {
             navigator.clipboard.writeText($("#rcode").text()).then(function() {
@@ -1418,7 +1307,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 </script>
 <script>
     function ahelp(){
-        layui.layer.alert('Please separate the Numbers at risk for the current group by spaces. For example: 128 48 32 12 6 0 0. For detailed instructions, please refer to the <a href="doc/ipd/index.html" style="color: #007DDB;" target="_blank">Documentation</a> or see the example input in the <span onclick=\"openTrainWindow()\" style="color: #FF5722;font-weight: bold;cursor: pointer;">KM Curve Case</span>.',{
+        layui.layer.alert('Please separate the Numbers At Risk for the current group by spaces. For example: 128 48 32 12 6 0 0. For detailed instructions, please refer to the <a href="doc/ipd/index.html" style="color: #007DDB;" target="_blank">Documentation</a> or see the example input in the <span onclick=\"openTrainWindow()\" style="color: #FF5722;font-weight: bold;cursor: pointer;">KM Curve Case</span>.',{
             title : "Help",
             btn : ["OK"],
             shadeClose : true
