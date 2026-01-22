@@ -422,15 +422,14 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
     </div>
     <div style="padding: 10px;">
     <div style="padding-top: 10px;line-height: 24px;">
-        <p>Each Kaplan-Meier plot corresponds to one of the 7 condition combinations. Selecting a specific combination will directly load the corresponding plot, data points, and condition information. Specifically:</p>
+        <p>Each Kaplan-Meier plot corresponds to one of the 8 constraint combinations. Selecting a specific combination will directly load the corresponding plot, data points, and constraint information. Specifically:</p>
         <ul class="haspointul">
-            <li><strong>P</strong> represents the breakpoint information.</li>
-            <li><strong>E</strong> represents the Event.</li>
-            <li><strong>A</strong> represents the At Risk.</li>
-            <li><strong>C</strong> represents the Censor.</li>
+            <li><strong>N</strong> represents the Total Sample Size.</li>
+            <li><strong>E</strong> represents the Total Events.</li>
+            <li><strong>R</strong> represents the At-risk Table.</li>
+            <li><strong>C</strong> represents the Censoring.</li>
         </ul>
-        <p>For example, the combination <strong>PEAC</strong> indicates a condition where breakpoint information (P), Event (E), At Risk (A), and Censor (C) are all included.</p>
-
+        <p>For example, the combination <strong>NERC</strong> indicates a scenario where Sample Size (N), Events (E), At-risk Table (R), and Censoring (C) are all included as constraints.</p>
     </div>
     <table class="layui-table" >
         <tr>
