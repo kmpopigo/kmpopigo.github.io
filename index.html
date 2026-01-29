@@ -238,7 +238,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             </div>
         </li>
         <li style="display: none;">
-            Maximum X-axis : <strong id="rightLabel"></strong>
+            Maximum Time axis : <strong id="rightLabel"></strong>
         </li>
         <li style="display: none;"><input id="leftx" value="0" style="width: 30px;padding: 8px;">，
             <input id="lefty" value="0" style="width: 30px;padding: 8px;"></li>
@@ -301,7 +301,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
     </div>
     <div style="margin: 10px;padding:10px;background-color: #FFF;">
         <div>Time Interval:<input id="timeseq" class="layui-input" style="display: inline-block;width: 80px;margin-left: 5px;">
-            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;" onclick="layui.layer.msg('If the X-axis values are 0, 6, 12, 18, and so on, then the time interval on the X-axis is 6.')">?</div>
+            <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;" onclick="layui.layer.msg('if the Time axis ticks are 0, 6, 12..., the time interval is 6.')">?</div>
         </div>
         <div style="margin-top: 10px;">Numbers At Risk:<input id="atrisk" class="layui-input"
                                                           style="display: inline-block;width: 440px;margin-left: 5px;">
@@ -391,7 +391,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         <div style="padding: 10px 0;">Select the R code to generate：
             <select id="codeSelect">
                 <option value="hr">Hazard Ratio</option>
-                <option value="ms">Median & Survival Probability</option>
+                <option value="ms">Median & Survival Rate</option>
                 <option value="km">Kaplan-Meier Curves</option>
             </select>
         </div>
@@ -516,7 +516,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         layui.use(['layer'], function () {
             let layer = layui.layer
             layer.prompt({
-                title: 'Please enter the maximum value on the X-axis.',
+                title: 'Please enter the maximum scale value for the Time axis.',
                 formType: 0,
                 btn : ["OK","Close"],
                 shadeClose : true,
