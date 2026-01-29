@@ -119,12 +119,12 @@
                             <tr>
                                 <td>key_point_coordinates</td>
                                 <td>Key Point Coordinates</td>
-                                <td>A 2D array recording the (t, p) pixel coordinates of all marked <strong>Key Points</strong>.</td>
+                                <td>A 2D array recording the (x, y) pixel coordinates of all marked <strong>Key Points</strong>.</td>
                             </tr>
                             <tr>
                                 <td>censoring_time_coordinates</td>
                                 <td>Censoring Time Coordinates</td>
-                                <td>A 2D array recording the (t, p) pixel coordinates of all marked <strong>Censoring Times</strong>.</td>
+                                <td>A 2D array recording the (x, y) pixel coordinates of all marked <strong>Censoring Times</strong>.</td>
                             </tr>
                             <tr>
                                 <td>coordinate_origin</td>
@@ -132,14 +132,14 @@
                                 <td>The pixel coordinates of the <strong>KM curve's coordinate origin</strong>, obtained via the "Calibrate Origin" operation.</td>
                             </tr>
                             <tr>
-                                <td>survival_prob_max_scale</td>
+                                <td>axis_limit_coordinates</td>
                                 <td>Axis Limit Coordinates</td>
-                                <td>The pixel coordinates representing the intersection of the maximum <strong>Time axis</strong> scale and the <strong>Survival probability axis</strong> scale (1.0), obtained via the "Calibrate Axis Limits" operation.</td>
+                                <td>The (x, y) pixel coordinates representing the point (time_axis_max_scale, 1.0) in the KM coordinate system, used to establish the mapping between the image pixels and the survival analysis scales.</td>
                             </tr>
                             <tr>
                                 <td>time_axis_max_scale</td>
                                 <td>Maximum Time Axis Value</td>
-                                <td>The numerical value corresponding to the maximum scale of the Time axis (entered by the user during calibration).</td>
+                                <td>The numerical value corresponding to the maximum scale of the KM curve's Time axis (entered by the user during calibration).</td>
                             </tr>
                             <tr>
                                 <td>group_name</td>
