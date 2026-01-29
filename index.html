@@ -672,7 +672,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             key_point_coordinates : posList_blue,
             censoring_time_coordinates : censorPointList,
             coordinate_origin : zero,
-            survival_prob_max_scale : maxY,
+            axis_limit_coordinates : maxY,
             time_axis_max_scale : $("#rightx").val(),
             group_name : $("#groupname").val(),
             at_risk_time_interval : $("#timeseq").val(),
@@ -723,7 +723,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 posList_blue = jsonData.key_point_coordinates;
                 censorPointList = jsonData.censoring_time_coordinates;
                 zero = jsonData.coordinate_origin;
-                maxY = jsonData.survival_prob_max_scale;
+                maxY = jsonData.axis_limit_coordinates;
                 $("#rightx").val(jsonData.time_axis_max_scale);
                 $("#groupname").val(jsonData.group_name);
                 $("#timeseq").val(jsonData.at_risk_time_interval);
@@ -774,7 +774,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 posList_blue = jsonData.key_point_coordinates;
                 censorPointList = jsonData.censoring_time_coordinates;
                 zero = jsonData.coordinate_origin;
-                maxY = jsonData.survival_prob_max_scale;
+                maxY = jsonData.axis_limit_coordinates;
                 $("#rightx").val(jsonData.time_axis_max_scale);
                 $("#groupname").val(jsonData.group_name);
                 $("#timeseq").val(jsonData.at_risk_time_interval);
