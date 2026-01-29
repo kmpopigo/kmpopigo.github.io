@@ -1227,7 +1227,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             "surv_fit <- survfit(survival_data ~ group, data = df)\n" +
             "# Calculate median survival time\n" +
             "median_survival_time <- surv_median(surv_fit)\n"+
-        "# Set the 'time' variable to calculate the survival rate at the current point in time. For example, if the x-axis is measured in months, then a 'time' value of 12 indicates a 1-year survival rate.\n" +
+        "# Set the 'time' variable to calculate the survival rate at the current point in time. For example, if the Time axis is measured in months, then a 'time' value of 12 indicates a 1-year survival rate.\n" +
             "time <- 12\n" +
             "survival_rate <- summary(surv_fit, times = c(time))\n" +
             "print(paste(\"Median :\",median_survival_time$median,\"[\",median_survival_time$lower,\"-\",median_survival_time$upper,\"]\"))\n"+
