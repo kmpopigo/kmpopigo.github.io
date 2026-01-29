@@ -669,21 +669,21 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 
     function downloadInfo(){
         let downloadJson = {
-            posList : posList_blue,
-            censorPointList : censorPointList,
-            zero : zero,
-            maxY : maxY,
-            maxYtime : $("#rightx").val(),
-            groupname : $("#groupname").val(),
-            timeseq : $("#timeseq").val(),
-            atrisk : $("#atrisk").val(),
-            total : $("#total").val(),
-            events : $("#events").val(),
-            c_width : c.width,
-            c_height : c.height
+            key_point_coordinates : posList_blue,
+            censoring_time_coordinates : censorPointList,
+            coordinate_origin : zero,
+            survival_prob_max_scale : maxY,
+            time_axis_max_scale : $("#rightx").val(),
+            group_name : $("#groupname").val(),
+            at_risk_time_interval : $("#timeseq").val(),
+            at_risk_numbers : $("#atrisk").val(),
+            sample_size : $("#total").val(),
+            number_of_events : $("#events").val(),
+            canvas_width : c.width,
+            canvas_height : c.height
         }
         const canvasData = c.toDataURL('image/png');
-        downloadJson.canvas = canvasData;
+        downloadJson.canvas_image_base64 = canvasData;
         // 将JSON对象转换为字符串
         const jsonString = JSON.stringify(downloadJson, null, 2);
         // 创建一个Blob对象，类型为text/plain
@@ -720,27 +720,27 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             try {
                 const jsonString = e.target.result;
                 const jsonData = JSON.parse(jsonString);
-                posList_blue = jsonData.posList;
-                censorPointList = jsonData.censorPointList;
-                zero = jsonData.zero;
-                maxY = jsonData.maxY;
-                $("#rightx").val(jsonData.maxYtime);
-                $("#groupname").val(jsonData.groupname);
-                $("#timeseq").val(jsonData.timeseq);
-                $("#atrisk").val(jsonData.atrisk);
-                $("#total").val(jsonData.total);
-                $("#events").val(jsonData.events);
-                $("#canvasBox").css("height", jsonData.c_height + "px")
-                c.width = jsonData.c_width;
-                c.height = jsonData.c_height;
+                posList_blue = jsonData.key_point_coordinates;
+                censorPointList = jsonData.censoring_time_coordinates;
+                zero = jsonData.coordinate_origin;
+                maxY = jsonData.survival_prob_max_scale;
+                $("#rightx").val(jsonData.time_axis_max_scale);
+                $("#groupname").val(jsonData.group_name);
+                $("#timeseq").val(jsonData.at_risk_time_interval);
+                $("#atrisk").val(jsonData.at_risk_numbers);
+                $("#total").val(jsonData.sample_size);
+                $("#events").val(jsonData.number_of_events);
+                $("#canvasBox").css("height", jsonData.canvas_height + "px")
+                c.width = jsonData.canvas_width;
+                c.height = jsonData.canvas_height;
                 blue.width = c.width;
                 blue.height = c.height;
                 ctx = c.getContext("2d");
                 const img = new Image();
-                img.src = jsonData.canvas;
+                img.src = jsonData.canvas_image_base64;
                 img.onload = function() {
                     // 将图像绘制到Canvas上
-                    ctx.drawImage(img, 0, 0, jsonData.c_width, jsonData.c_height);
+                    ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
                 };
                 showAtRisk(true);
                 refreshPoint();
@@ -771,27 +771,27 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             .then(data => {
                 // 处理加载到的 JSON 数据
                 const jsonData = data;
-                posList_blue = jsonData.posList;
-                censorPointList = jsonData.censorPointList;
-                zero = jsonData.zero;
-                maxY = jsonData.maxY;
-                $("#rightx").val(jsonData.maxYtime);
-                $("#groupname").val(jsonData.groupname);
-                $("#timeseq").val(jsonData.timeseq);
-                $("#atrisk").val(jsonData.atrisk);
-                $("#total").val(jsonData.total);
-                $("#events").val(jsonData.events);
-                $("#canvasBox").css("height", jsonData.c_height + "px")
-                c.width = jsonData.c_width;
-                c.height = jsonData.c_height;
+                posList_blue = jsonData.key_point_coordinates;
+                censorPointList = jsonData.censoring_time_coordinates;
+                zero = jsonData.coordinate_origin;
+                maxY = jsonData.survival_prob_max_scale;
+                $("#rightx").val(jsonData.time_axis_max_scale);
+                $("#groupname").val(jsonData.group_name);
+                $("#timeseq").val(jsonData.at_risk_time_interval);
+                $("#atrisk").val(jsonData.at_risk_numbers);
+                $("#total").val(jsonData.sample_size);
+                $("#events").val(jsonData.number_of_events);
+                $("#canvasBox").css("height", jsonData.canvas_height + "px")
+                c.width = jsonData.canvas_width;
+                c.height = jsonData.canvas_height;
                 blue.width = c.width;
                 blue.height = c.height;
                 ctx = c.getContext("2d");
                 const img = new Image();
-                img.src = jsonData.canvas;
+                img.src = jsonData.canvas_image_base64;
                 img.onload = function() {
                     // 将图像绘制到Canvas上
-                    ctx.drawImage(img, 0, 0, jsonData.c_width, jsonData.c_height);
+                    ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
                 };
                 showAtRisk();
                 refreshPoint();

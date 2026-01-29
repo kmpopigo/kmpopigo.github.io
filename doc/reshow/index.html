@@ -117,73 +117,73 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>posList</td>
+                                <td>key_point_coordinates</td>
                                 <td>Key Point Coordinates</td>
-                                <td>A 2D array recording the (t, p) pixel coordinates of all digitized <strong>Key Points</strong>.</td>
+                                <td>A 2D array recording the (t, p) pixel coordinates of all marked <strong>Key Points</strong>.</td>
                             </tr>
                             <tr>
-                                <td>censorPointList</td>
-                                <td>Censoring Mark Coordinates</td>
-                                <td>A 2D array recording the (t, p) pixel coordinates of all marked <strong>Censoring Events</strong>.</td>
+                                <td>censoring_time_coordinates</td>
+                                <td>Censoring Time Coordinates</td>
+                                <td>A 2D array recording the (t, p) pixel coordinates of all marked <strong>Censoring Times</strong>.</td>
                             </tr>
                             <tr>
-                                <td>zero</td>
-                                <td>Origin Coordinates</td>
-                                <td>The pixel coordinates of the origin (0, 0) on the canvas, obtained via the <strong>"Calibrate Origin"</strong> operation.</td>
+                                <td>coordinate_origin</td>
+                                <td>KM Coordinate Origin</td>
+                                <td>The pixel coordinates of the <strong>KM curve's coordinate origin</strong>, obtained via the "Calibrate Origin" operation.</td>
                             </tr>
                             <tr>
-                                <td>maxY</td>
+                                <td>survival_prob_max_scale</td>
                                 <td>Axis Limit Coordinates</td>
-                                <td>The pixel coordinates of the calibration point (T_max, 1.0), obtained via the <strong>"Calibrate Axis Limits"</strong> operation.</td>
+                                <td>The pixel coordinates representing the intersection of the maximum <strong>Time axis</strong> scale and the <strong>Survival probability axis</strong> scale (1.0), obtained via the "Calibrate Axis Limits" operation.</td>
                             </tr>
                             <tr>
-                                <td>maxYtime</td>
+                                <td>time_axis_max_scale</td>
                                 <td>Maximum Time Axis Value</td>
                                 <td>The numerical value corresponding to the maximum scale of the Time axis (entered by the user during calibration).</td>
                             </tr>
                             <tr>
-                                <td>groupname</td>
+                                <td>group_name</td>
                                 <td>Group Name</td>
-                                <td>The user-defined identifier for the current experimental group.</td>
+                                <td>The user-defined identifier for the current group.</td>
                             </tr>
                             <tr>
-                                <td>timeseq</td>
+                                <td>at_risk_time_interval</td>
                                 <td>At-risk Table Time Interval</td>
                                 <td>A single numerical value representing the fixed time interval between columns in the At-risk table (e.g., 5).</td>
                             </tr>
                             <tr>
-                                <td>atrisk</td>
+                                <td>at_risk_numbers</td>
                                 <td>At-risk Numbers (R)</td>
-                                <td>The number of subjects at risk recorded corresponding to the time intervals defined by <code>timeseq</code>.</td>
+                                <td>The number of patients at risk recorded corresponding to the time intervals defined by <code>at_risk_time_interval</code>.</td>
                             </tr>
                             <tr>
-                                <td>total</td>
-                                <td>Total Sample Size (N)</td>
-                                <td>The initial number of subjects in the study group.</td>
+                                <td>sample_size</td>
+                                <td>Sample Size (N)</td>
+                                <td>The total number of patients in the group.</td>
                             </tr>
                             <tr>
-                                <td>events</td>
+                                <td>number_of_events</td>
                                 <td>Number of Events (E)</td>
-                                <td>The total count of events observed during the study.</td>
+                                <td>The total number of events observed during the study.</td>
                             </tr>
                             <tr>
-                                <td>c_width</td>
-                                <td>Image Width</td>
-                                <td>The width of the uploaded KM curve image (in pixels).</td>
+                                <td>canvas_width</td>
+                                <td>Canvas Width</td>
+                                <td>The width of the digitization canvas (in pixels). Required to accurately restore the Base64 image and ensure coordinate alignment.</td>
                             </tr>
                             <tr>
-                                <td>c_height</td>
-                                <td>Image Height</td>
-                                <td>The height of the uploaded KM curve image (in pixels).</td>
+                                <td>canvas_height</td>
+                                <td>Canvas Height</td>
+                                <td>The height of the digitization canvas (in pixels). Required to accurately restore the Base64 image and ensure coordinate alignment.</td>
                             </tr>
                             <tr>
-                                <td>canvas</td>
-                                <td>Image Data</td>
-                                <td>The raw image string encoded in <strong>Base64</strong> format.</td>
+                                <td>canvas_image_base64</td>
+                                <td>Canvas Image (Base64)</td>
+                                <td>The KM curve image string encoded in <strong>Base64</strong> format. Required to reconstruct the visual context of the digitization workspace.</td>
                             </tr>
                             </tbody>
                         </table>
-                        <p>During peer review or manuscript submission, ensuring the <strong>reproducibility</strong> of results is paramount. Users can share the exported project JSON file with reviewers to facilitate independent verification. By clicking the <strong>"Load Project"</strong> button in <strong>KM-PoPiGo</strong> and selecting the file, the system instantly restores the complete workspace state, including the original image, <strong>Key Point</strong> markings, <strong>Censoring Times</strong>, and all associated <strong>Study Parameters</strong>. Consequently, the reviewer can audit the marking precision and parameter inputs before executing the <strong>"Run Reconstruction"</strong> function to validate the final IPD output.</p>
+                        <p>During peer review or manuscript submission, ensuring the <strong>reproducibility</strong> of results is paramount. Users can share the exported project JSON file with reviewers to facilitate independent verification. By clicking the <strong>"Load Project"</strong> button in <strong>KM-PoPiGo</strong> and selecting the file, the system restores the complete workspace state, including the original KM image, <strong>Key Point</strong> markings, <strong>Censoring Times</strong>, and all associated <strong>Study Parameters</strong>. Consequently, the reviewer can audit the marking precision and parameter inputs before executing the <strong>"Run Reconstruction"</strong> function to validate the final IPD output.</p>
                     </div>
             </div>
         </div>
