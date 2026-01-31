@@ -5,140 +5,113 @@ let layer = layui.layer;
 //     }
 // }
 blue.addEventListener("click", function (event) {
-        // 获取鼠标点击位置相对于Canvas的坐标
-        let x = event.layerX;
-        let y = event.layerY;
-        switch (drawType){
-            case "zero" :
-                zero.x = x;
-                zero.y = y;
-                // drawType = "confirmRight";
+    // Get mouse click coordinates relative to the Canvas
+    let x = event.layerX;
+    let y = event.layerY;
+    switch (drawType) {
+        case "zero":
+            zero.x = x;
+            zero.y = y;
+            // drawType = "confirmRight";
+            drawInforLine();
+            layer.msg("If the selected origin is not accurate, you can keep clicking until you are satisfied.")
+            break;
+        case "confirmRight":
+            maxY.x = x;
+            maxY.y = y;
+            // drawType = "blue";
+            drawInforLine();
+            layer.msg("If the selected point is not accurate, you can keep clicking until you are satisfied.")
+            break;
+        case "insert":
+            if (posList_blue.length < 1) {
+                drawType = "blue";
+            } else {
+                // Iterate through the array to find the insertion position
+                insertNumber(posList_blue, [x, y])
                 drawInforLine();
-                layer.msg("If the selected origin is not accurate, you can keep clicking until you are satisfied.")
-                break;
-            case "confirmRight" :
-                maxY.x = x;
-                maxY.y = y;
-                // drawType = "blue";
-                drawInforLine();
-                layer.msg("If the selected point is not accurate, you can keep clicking until you are satisfied.")
-                break;
-            // case "del" :
-            //     posList_blue.forEach(function (value,index){
-            //         if((Math.abs(value[0]-x)<5)&&(Math.abs(value[1]-y)<5)){
-            //             posList_blue.splice(index, 1);
-            //         }
-            //     })
-            //     drawInforLine();
-            //     break;
-            // case "delCensor" :
-            //     censorPointList.forEach(function (value,index){
-            //         if((Math.abs(value[0]-x)<5)&&(Math.abs(value[1]-y)<5)){
-            //             censorPointList.splice(index, 1);
-            //         }
-            //     })
-            //     drawInforLine();
-            //     break;
-            case "insert" :
-                if(posList_blue.length<1){
-                    drawType = "blue";
-                }else{
-                    // 遍历数组找到插入位置
-                    insertNumber(posList_blue, [x,y])
-                    drawInforLine();
+            }
+            break;
+        case "blue":
+            if ((maxY != undefined) && (zero.x != undefined)) {
+                // Calculate dynamic thresholds: 1/100 of the total axis length
+                let thredX = Math.abs(maxY.x - zero.x) * 0.01;
+                let thredY = Math.abs(zero.y - maxY.y) * 0.01;
+
+                let lastX = parseInt(zero.x);
+                let lastY = parseInt(maxY.y);
+
+                if (posList_blue.length > 0) {
+                    lastX = posList_blue[posList_blue.length - 1][0];
+                    lastY = posList_blue[posList_blue.length - 1][1];
+                } else {
+                    lastX += 1;
+                    lastY += 1;
                 }
 
-                break;
-            case "blue" :
-                let thred = 4;
-                if((maxY!=undefined)&&(zero.x!=undefined)){
-                    let lastX=parseInt(zero.x);
-                    let lastY=parseInt(maxY.y);
-                    if(posList_blue.length>0){
-                        lastX = posList_blue[posList_blue.length-1][0];
-                        lastY = posList_blue[posList_blue.length-1][1]
-                    }else{
-                        lastX += 1;
-                        lastY += 1;
-                    }
-                    let newX = ((x-lastX) <thred) ? lastX+thred : x;
-                    let newY = ((y-lastY) <thred) ? lastY : y;
-                    if(newY>zero.y){
-                        newY = zero.y;
-                        // newX = lastX;
-                    }else if((zero.y-newY)<thred){
-                        newY = zero.y;
-                        newX = lastX;
-                    }else{
-                        newX = ((x-lastX) <thred) ? lastX+thred : x;
-                        newY = ((y-lastY <thred)) ? lastY : y;
-                    }
+                // Apply specific X and Y thresholds
+                let newX = ((x - lastX) < thredX) ? lastX + thredX : x;
+                let newY = ((y - lastY) < thredY) ? lastY : y;
 
-                    posList_blue.push([newX,newY]);
-                    drawInforLine();
+                if (newY > zero.y) {
+                    newY = zero.y;
+                } else if ((zero.y - newY) < thredY) {
+                    newY = zero.y;
+                    newX = lastX;
+                } else {
+                    newX = ((x - lastX) < thredX) ? lastX + thredX : x;
+                    newY = ((y - lastY) < thredY) ? lastY : y;
+                }
 
-                }else{
-                    layer.msg("请先设置前四个步骤！")
-                }
-                for(let i=1;i<posList_blue.length-1;i++){
-                    if((posList_blue[i][1]==posList_blue[i-1][1])){
-                        posList_blue.splice(i,1);
-                    }
-                    if((posList_blue[i][0]==posList_blue[i-1][0])){
-                        posList_blue.splice(i,1);
-                    }
-                }
-                drawType = "insert";
-                break;
-            case "censorBlue" :
-                let curcensorY = 0;
-                if((maxY!=undefined)&&(zero.x!=undefined)){
-                    for(let i=0;i<posList_blue.length-1;i++){
-                        if(x<posList_blue[0][0]){
-                            curcensorY = maxY.y;
-                            break;
-                        }
-                        if(x<posList_blue[i+1][0]){
-                            curcensorY = posList_blue[i][1];
-                            break;
-                        }
-                    }
-                    censorPointList.push([x,curcensorY]);
-                }else{
-                    layer.msg("请先设置前四个步骤！")
-                }
+                posList_blue.push([newX, newY]);
                 drawInforLine();
 
-                break;
-            default:
-                break;
-        }
-        refreshPoint();
+            } else {
+                layer.msg("Please complete the first four steps first!");
+            }
 
-    });
+            // Clean up duplicate points based on new thresholds
+            for (let i = 1; i < posList_blue.length - 1; i++) {
+                if (Math.abs(posList_blue[i][1] - posList_blue[i - 1][1]) < 0.1) {
+                    posList_blue.splice(i, 1);
+                }
+                if (Math.abs(posList_blue[i][0] - posList_blue[i - 1][0]) < 0.1) {
+                    posList_blue.splice(i, 1);
+                }
+            }
+            drawType = "insert";
+            break;
+        case "censorBlue":
+            let curcensorY = 0;
+            if ((maxY != undefined) && (zero.x != undefined)) {
+                for (let i = 0; i < posList_blue.length - 1; i++) {
+                    if (x < posList_blue[0][0]) {
+                        curcensorY = maxY.y;
+                        break;
+                    }
+                    if (x < posList_blue[i + 1][0]) {
+                        curcensorY = posList_blue[i][1];
+                        break;
+                    }
+                }
+                censorPointList.push([x, curcensorY]);
+            } else {
+                layer.msg("Please complete the first four steps first!")
+            }
+            drawInforLine();
+
+            break;
+        default:
+            break;
+    }
+    refreshPoint();
+});
 
 function delLastPoint(){
     posList_blue.pop();
     console.log(posList_blue)
     drawInforLine();
 }
-// function insertNumber(array,numberToInsert){
-//     if (numberToInsert[1]>zero.y){
-//         numberToInsert[1] = zero.y;
-//     }
-//
-//     for (let i = 0; i < array.length; i++) {
-//         if (array[i][0] > numberToInsert[0]){
-//             array.splice(i, 0, numberToInsert);
-//             break;
-//         }
-//     }
-//     if(numberToInsert[0]>array[array.length-1][0]){
-//         array.push(numberToInsert);
-//     }
-//     removeInvalidPoints(array);
-//     return array;
-// }
 function removeInvalidPoints(array){
     for (let i = 0; i < array.length-2; i++) {
         if (array[i][1] > array[i+1][1]){
