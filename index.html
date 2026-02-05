@@ -831,10 +831,13 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         }
 
         layer.confirm('Please verify that the <strong>Group Name</strong>, <strong>Sample Size</strong>, <strong>Number of Events</strong>, and <strong>At-risk Table</strong> in the \'Set Study Parameters\' section are correct. Click <strong>Confirm</strong> to start IPD reconstruction.', {
+            title: "Tips",
             btn: ['Confirm', 'Cancel'] //按钮
         }, function () {
+
                 layer.confirm('Data confirmed. Proceed with IPD reconstruction?', {
-                    btn: ['Yes, Start', 'No'] //按钮
+                    title: "Tips",
+                    btn: ['Yes, Start', 'No',] //按钮
                 }, function () {
                     toSolve()
                     layer.closeAll();
