@@ -175,7 +175,7 @@
 <div style="background-color: #2F4056;position: relative;height: 80px;">
     <div style="display: inline-block;font-size: 32px;color: #FFF;font-weight: bold;position: absolute;top: 10px;left: 20px;width: 300px;">
         <img src="img/logo.png" style="width: 130px;" />
-        <span style="font-size: 12px;position: absolute;bottom: 5px;left: 10px;color: #2D93CA;top:50px;">Version 1.0.2-beta.2</span></div>
+        <span style="font-size: 12px;position: absolute;bottom: 5px;left: 10px;color: #2D93CA;top:50px;">Version 1.0.3-beta.2</span></div>
     <ul id="mainNav" style="margin-top: 10px;">
         <li style="cursor: none;color: #07c160;">Reconstructor</li>
         <li style="cursor:pointer;" onclick="$('#trainwindow').show()">Example Cases</li>
@@ -261,10 +261,9 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             </div>
         </li>
     </ul>
-<div style="margin: 10px;padding: 10px;background-color: #ffdade;">
-    In the 'Mark Key Points' or 'Mark Censoring Times' mode, use the left mouse button to add points and the right mouse button to delete the point under the cursor.
-</div>
-<!--    <div style="padding: 10px;"><button class="layui-btn" onclick="localStorage.clear()">Clear All Results</button></div>-->
+    <div style="margin: 10px;padding: 10px;background-color: #ffdade;">
+        In the 'Mark Key Points' or 'Mark Censoring Times' mode, use the left mouse button to add points and the right mouse button to delete the point under the cursor.
+    </div>
 </div>
 <div style="margin: 0 auto;position: absolute;right: 5px;top: 80px;left: 275px;">
     <ul class="loadUL">
@@ -304,7 +303,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;" onclick="layui.layer.msg('if the Time axis ticks are 0, 6, 12..., the time interval is 6.')">?</div>
         </div>
         <div style="margin-top: 10px;">Numbers At Risk:<input id="atrisk" class="layui-input"
-                                                          style="display: inline-block;width: 440px;margin-left: 5px;">
+                                                              style="display: inline-block;width: 440px;margin-left: 5px;">
             <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;" onclick="ahelp()">?</div>
         </div>
         <div style="padding: 20px;background-color: #efefef;margin-top: 10px;">
@@ -322,22 +321,22 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
     </div>
     <div style="margin: 10px;padding:10px;background-color: #FFF;">
         <div style="margin-top: 10px;">Sample Size:<input id="total" class="layui-input"
-                                                           style="display: inline-block;width: 140px;margin-left: 5px;"
-                                                           value="0">
+                                                          style="display: inline-block;width: 140px;margin-left: 5px;"
+                                                          value="0">
             <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;"
                  onclick="layui.layer.msg('Sample size of the current group.')">?</div>
         </div>
         <div style="margin-top: 10px;">Number of Events:<input id="events" class="layui-input"
-                                                           style="display: inline-block;width: 140px;margin-left: 5px; "
-                                                           value="0">
+                                                               style="display: inline-block;width: 140px;margin-left: 5px; "
+                                                               value="0">
             <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;"
                  onclick="layui.layer.msg('Numbers of event of the current group.')">?</div>
         </div>
     </div>
     <div style="margin: 10px;padding:10px;background-color: #FFF;">
         <div style="margin-top: 10px;">Group Name:<input id="groupname" class="layui-input"
-                                                           style="display: inline-block;width: 140px;margin-left: 5px;"
-                                                           value="Group">
+                                                         style="display: inline-block;width: 140px;margin-left: 5px;"
+                                                         value="Group">
             <div class="seqnum" style="cursor: pointer;margin-left: 5px;background-color: #333;"
                  onclick="layui.layer.msg('The group name of the current group must not conflict with the names of the groups that have already been saved.')">?</div>
         </div>
@@ -368,13 +367,14 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 
 </div>
 <div id="reconstructWindow" style="">
-    <div onclick="$('#reconstructWindow').hide()" style="position: absolute;right: 10px;top:10px;">
+    <!-- 修改了这里的 onclick 事件，绑定至 abortReconstruction 从而终止任务 -->
+    <div onclick="abortReconstruction()" style="position: absolute;right: 10px;top:10px;">
         <div class="layui-badge sqclose">
             <i class="layui-icon layui-icon-close" style="font-size: 14px; color: #FFFFFF;"></i>
         </div>
     </div>
     <div style="padding-bottom: 10px;font-size: 22px;text-align: center;">Iteration Round<span id="epoch"
-                                                                                    style="color: #07c160;margin-left: 5px;"></span>
+                                                                                               style="color: #07c160;margin-left: 5px;"></span>
     </div>
     <div id="hrValue">
 
@@ -421,76 +421,76 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         </div>
     </div>
     <div style="padding: 10px;">
-    <div style="padding-top: 10px;line-height: 24px;">
-        <p>Each Kaplan-Meier plot corresponds to one of the 8 constraint combinations. Selecting a specific combination will directly load the corresponding plot, data points, and constraint information. Specifically:</p>
-        <ul class="haspointul">
-            <li><strong>N</strong> represents the Sample Size.</li>
-            <li><strong>E</strong> represents the Number of Events.</li>
-            <li><strong>R</strong> represents the At-risk Table.</li>
-            <li><strong>C</strong> represents the Censoring Times.</li>
-        </ul>
-        <p>For example, the combination <strong>NERC</strong> indicates a scenario where Sample Size (N), Number of Events (E), At-risk Table (R), and Censoring Times (C) are all included as constraints.</p>
-    </div>
-    <table class="layui-table" >
-        <tr>
-            <td>Image</td>
-            <td>Group</td>
-            <td>NERC</td>
-            <td>NER</td>
-            <td>NEC</td>
-            <td>NRC</td>
-            <td>NE</td>
-            <td>NA</td>
-            <td>NC</td>
-            <td>N</td>
-        </tr>
-        <tr>
-            <td rowspan="2"><img src="train/train1/moni.png" style="height: 100px;"></td>
-            <td>High</td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEAC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEA')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PAC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PE')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PA')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_P')">load</button></td>
-        </tr>
-        <tr>
-            <td>Low</td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEAC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEA')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PAC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PE')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PA')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_P')">load</button></td>
-        </tr>
-        <tr>
-            <td rowspan="2"><img src="train/train2/moni.png" style="height: 100px;"></td>
-            <td>High</td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEAC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEA')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PAC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PE')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PA')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_P')">load</button></td>
-        </tr>
-        <tr>
-            <td>Low</td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEAC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEA')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PAC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PE')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PA')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PC')">load</button></td>
-            <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_P')">load</button></td>
-        </tr>
-    </table>
+        <div style="padding-top: 10px;line-height: 24px;">
+            <p>Each Kaplan-Meier plot corresponds to one of the 8 constraint combinations. Selecting a specific combination will directly load the corresponding plot, data points, and constraint information. Specifically:</p>
+            <ul class="haspointul">
+                <li><strong>N</strong> represents the Sample Size.</li>
+                <li><strong>E</strong> represents the Number of Events.</li>
+                <li><strong>R</strong> represents the At-risk Table.</li>
+                <li><strong>C</strong> represents the Censoring Times.</li>
+            </ul>
+            <p>For example, the combination <strong>NERC</strong> indicates a scenario where Sample Size (N), Number of Events (E), At-risk Table (R), and Censoring Times (C) are all included as constraints.</p>
+        </div>
+        <table class="layui-table" >
+            <tr>
+                <td>Image</td>
+                <td>Group</td>
+                <td>NERC</td>
+                <td>NER</td>
+                <td>NEC</td>
+                <td>NRC</td>
+                <td>NE</td>
+                <td>NA</td>
+                <td>NC</td>
+                <td>N</td>
+            </tr>
+            <tr>
+                <td rowspan="2"><img src="train/train1/moni.png" style="height: 100px;"></td>
+                <td>High</td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEAC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEA')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PEC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PAC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PE')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PA')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_PC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/high_P')">load</button></td>
+            </tr>
+            <tr>
+                <td>Low</td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEAC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEA')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PEC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PAC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PE')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PA')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_PC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train1/low_P')">load</button></td>
+            </tr>
+            <tr>
+                <td rowspan="2"><img src="train/train2/moni.png" style="height: 100px;"></td>
+                <td>High</td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEAC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEA')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PEC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PAC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PE')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PA')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_PC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/high_P')">load</button></td>
+            </tr>
+            <tr>
+                <td>Low</td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEAC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEA')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PEC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PAC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PE')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PA')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_PC')">load</button></td>
+                <td><button class="layui-btn-sm layui-btn" onclick="loadTrain('train/train2/low_P')">load</button></td>
+            </tr>
+        </table>
     </div>
 </div>
 <script src="layui/layui.js"></script>
@@ -520,7 +520,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 formType: 0,
                 btn : ["OK","Close"],
                 shadeClose : true,
-                shade: 0.3, // 可选：设置遮罩透明度
+                shade: 0.3,
             }, function (text, index) {
                 layer.close(index);
                 $("#rightx").val(text);
@@ -562,25 +562,19 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         fileInput.click();
     }
 
-    // 文件输入的change事件处理函数
     fileInput.addEventListener('change', function () {
-        // 获取选中的文件
         const files = fileInput.files;
         if (files.length > 0) {
             const file = files[0];
-            // 确保文件是图片
             if (!file.type.match('image.*')) {
                 alert('Please select an image file.');
                 return;
             }
 
-            // 使用FileReader读取图片文件
             const reader = new FileReader();
             reader.onload = function (e) {
-                // 创建一个新的Image对象
                 const img = new Image();
                 img.onload = function () {
-                    // 将图片绘制到canvas上
                     ctx.drawImage(img, 0, 0, c.width, c.height);
                 };
                 img.src = e.target.result;
@@ -589,7 +583,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         }
     });
     $("#codeSelect").change(function (){
-       let curtype = $("#codeSelect").val();
+        let curtype = $("#codeSelect").val();
         $("#selectedgroup").empty();
         $("#rcode").empty();
         if(curtype == "hr"){
@@ -615,9 +609,14 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         }
     }
 </script>
-<!--绘制蓝色线条-->
+
 <script>
-    let gaData = {isend:true};
+
+    let gaData = {
+        isend: true,
+        isRunning: false,
+        isAborted: false
+    };
     let sunimgid = 0;
     let groupLabel = "";
     let totalnum = "";
@@ -634,7 +633,6 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
     let codeDict = {}
     let refgroup = "";
     let selectedGroup = "";
-    //以下为取点相关的初始化
 
     $("#canvasBox").css("height", window.innerHeight - 75 + "px")
     let c = document.getElementById("canv");
@@ -649,7 +647,6 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
     let drawType = ""
     let split_array = [];
 
-    // 删失点坐标
     let censorPointList = [];
     let zero = {x: 0, y: 0}
     let maxY = {x: 0, y: 0}
@@ -684,22 +681,17 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         }
         const canvasData = c.toDataURL('image/png');
         downloadJson.canvas_image_base64 = canvasData;
-        // 将JSON对象转换为字符串
         const jsonString = JSON.stringify(downloadJson, null, 2);
-        // 创建一个Blob对象，类型为text/plain
         const blob = new Blob([jsonString], { type: 'text/plain' });
 
-        // 创建一个指向该Blob的URL
         const url = URL.createObjectURL(blob);
 
-        // 创建一个隐藏的<a>元素用于下载
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'data_with_canvas.json'; // 设置文件名
+        a.download = 'data_with_canvas.json';
         document.body.appendChild(a);
         a.click();
 
-        // 清理
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
@@ -739,7 +731,6 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 const img = new Image();
                 img.src = jsonData.canvas_image_base64;
                 img.onload = function() {
-                    // 将图像绘制到Canvas上
                     ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
                 };
                 showAtRisk();
@@ -758,18 +749,16 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         reader.readAsText(file);
     });
 
-    // 加载本地JSON文件
     function loadTrain(filename){
         $("#trainwindow").hide();
-        fetch(filename+'.json') // 替换为你的 JSON 文件路径
+        fetch(filename+'.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json(); // 解析 JSON 数据
+                return response.json();
             })
             .then(data => {
-                // 处理加载到的 JSON 数据
                 const jsonData = data;
                 posList_blue = jsonData.key_point_coordinates;
                 censorPointList = jsonData.censoring_time_coordinates;
@@ -790,7 +779,6 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 const img = new Image();
                 img.src = jsonData.canvas_image_base64;
                 img.onload = function() {
-                    // 将图像绘制到Canvas上
                     ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
                 };
                 showAtRisk();
@@ -804,7 +792,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
     }
     function clearPointsAndCensors(){
         layer.confirm("Are you sure you want to clear all marked break points and censoring times?", {
-            btn: ['Confirm', 'Close'] //按钮
+            btn: ['Confirm', 'Close']
         }, function () {
             posList_blue = [];
             censorPointList = [];
@@ -814,6 +802,24 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             layer.closeAll();
         });
 
+    }
+
+
+    function abortReconstruction() {
+
+        if (gaData.interval) {
+            clearInterval(gaData.interval);
+        }
+
+        gaData.isend = true;
+        gaData.isAborted = true;
+        gaData.isRunning = false;
+
+        if(window.reconLoading) {
+            layui.layer.close(window.reconLoading);
+        }
+        $('#reconstructWindow').hide();
+        layui.layer.msg("Reconstruction aborted.");
     }
 </script>
 <script>
@@ -832,24 +838,24 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 
         layer.confirm('Please verify that the <strong>Group Name</strong>, <strong>Sample Size</strong>, <strong>Number of Events</strong>, and <strong>At-risk Table</strong> in the \'Set Study Parameters\' section are correct. Click <strong>Confirm</strong> to start IPD reconstruction.', {
             title: "Tips",
-            btn: ['Confirm', 'Cancel'] //按钮
+            btn: ['Confirm', 'Cancel']
         }, function () {
-
-                layer.confirm('Data confirmed. Proceed with IPD reconstruction?', {
-                    title: "Tips",
-                    btn: ['Yes, Start', 'No',] //按钮
-                }, function () {
-                    toSolve()
-                    layer.closeAll();
-                }, function () {
-                    layer.closeAll();
-                });
+            layer.confirm('Data confirmed. Proceed with IPD reconstruction?', {
+                title: "Tips",
+                btn: ['Yes, Start', 'No',]
+            }, function () {
+                toSolve()
+                layer.closeAll();
+            }, function () {
+                layer.closeAll();
+            });
         }, function () {
             layer.closeAll();
         });
     }
-    function toSolve() {
 
+    // 【修改点 3】：增强触发机制的并发锁定
+    function toSolve() {
         totalnum = parseInt($("#total").val());
         totalevents = parseInt($("#events").val());
 
@@ -867,31 +873,52 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             $("#atriskwindow").show();
             $("#groupname").focus();
             return layui.layer.msg("This group name already exists. Please enter a different name.");
-
         }
         groupLabel = $("#groupname").val();
 
-        $('#reconstructWindow').show();
-        if(gaData.isend){
-            reconstructIPD(
-                groupLabel,
-                totalnum,
-                totalevents,
-                posList_blue,
-                plist_blue,
-                tlist_blue,
-                atRiskArray,
-                sureCensor,
-                maxtime
-            )
-        }else{
-
+        // 拦截尚未死透的旧任务
+        if (gaData.isRunning) {
+            return layui.layer.msg("A previous task is cleaning up. Please wait a moment.");
         }
 
+        gaData.isRunning = true;
+        gaData.isend = false;
+        gaData.isAborted = false;
+
+        $('#reconstructWindow').show();
+
+        window.reconLoading = layui.layer.msg('Running Genetic Optimization...', {
+            icon: 16,
+            shade: 0.5,
+            time: 0
+        });
+
+        reconstructIPD(
+            groupLabel,
+            totalnum,
+            totalevents,
+            posList_blue,
+            plist_blue,
+            tlist_blue,
+            atRiskArray,
+            sureCensor,
+            maxtime
+        );
     }
 </script>
 <script>
+    // 【修改点 4】：增强结果保存时的拦截与重置
     function saveSolution() {
+        gaData.isRunning = false;
+        gaData.isend = true;
+
+        // 如果用户在中途点击了关闭容器触发了废弃，这里必须拦截掉底层的存储回调
+        if (gaData.isAborted) {
+            gaData.isAborted = false;
+            console.warn("Intercepted an aborted save request.");
+            return;
+        }
+
         if (groupLabel == "") {
             groupLabel = "Group"
         }
@@ -900,6 +927,11 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
         localStorage.setItem("result", JSON.stringify(resultArray));
         localStorage.setItem(groupLabel, ipd);
         showAllResults();
+
+        if(window.reconLoading) {
+            layui.layer.close(window.reconLoading);
+        }
+
         $("#reconstructWindow").hide();
     }
 
@@ -987,7 +1019,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 
     function deleteResult(groupName) {
         layer.confirm('Are you sure you want to delete ' + groupName + '?', {
-            btn: ['Confirm', 'Close'] //按钮
+            btn: ['Confirm', 'Close']
         }, function () {
             localStorage.removeItem(groupName);
             let groupArray = JSON.parse(localStorage.getItem("result"));
@@ -1157,7 +1189,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 
         codestr +="df$group <- as.factor(df$group)\n" +
             "# Note: Modify the reference group name below\n"+
-        "df$group <- relevel(df$group, ref = \""+refgroup+"\")\n" ;
+            "df$group <- relevel(df$group, ref = \""+refgroup+"\")\n" ;
         codestr += "survival_data <- Surv(time = df$time, event = df$status)\n" +
             "fit <- coxph(survival_data ~ group, data = df)\n" +
 
@@ -1221,7 +1253,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             "surv_fit <- survfit(survival_data ~ group, data = df)\n" +
             "# Calculate median survival time\n" +
             "median_survival_time <- surv_median(surv_fit)\n"+
-        "# Set the 'time' variable to calculate the survival rate at the current point in time. For example, if the Time axis is measured in months, then a 'time' value of 12 indicates a 1-year survival rate.\n" +
+            "# Set the 'time' variable to calculate the survival rate at the current point in time. For example, if the Time axis is measured in months, then a 'time' value of 12 indicates a 1-year survival rate.\n" +
             "time <- 12\n" +
             "survival_rate <- summary(surv_fit, times = c(time))\n" +
             "print(paste(\"Median :\",median_survival_time$median,\"[\",median_survival_time$lower,\"-\",median_survival_time$upper,\"]\"))\n"+

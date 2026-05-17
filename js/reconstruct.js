@@ -14,8 +14,13 @@ function reconstructIPD(label,total,totalevents,posList,plist,tlist,atRiskArray,
         })
     }
 
+
     if(tlist[tlist.length-1] == maxMonth){
         sureCensor.push(0);
+    }
+
+    if (typeof gaData !== 'undefined' && gaData.interval) {
+        clearInterval(gaData.interval);
     }
 
     gaData = {
@@ -25,9 +30,9 @@ function reconstructIPD(label,total,totalevents,posList,plist,tlist,atRiskArray,
         plist:plist,
         xiList: xiList,
         sureCensor: sureCensor,
-        lossList: [], //每个线性方程组的误差
-        bitLength: 6,// 二进制长度
-        pointNum: 0,// 小数点长度
+        lossList: [],
+        bitLength: 6,
+        pointNum: 0,
         minLoss: 1000000000,
         maxMonth: maxMonth,
         interval:null,
@@ -37,7 +42,9 @@ function reconstructIPD(label,total,totalevents,posList,plist,tlist,atRiskArray,
         aAtRiskArray:aAtRiskArray_test,
         riskNumberDict:{},
         atRiskDict:atRiskDict,
-        isend:false
+        isend: false,
+        isRunning: true,
+        isAborted: false
     }
     gaData.riskNumberDict = getAtRiskNum(gaData.atRiskTimeArray,gaData.aAtRiskArray);
     solve(label,total,tlist,xiList,sureCensor,plist,maxMonth)

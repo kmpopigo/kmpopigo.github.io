@@ -1,15 +1,20 @@
 function solve() {
     let populationNum = 100;
-    // 总共有多少t时刻
+
     let m = gaData.xiList.length;
-    // 迭代次数
+
     let epochTotal = 10000;
     let epochNum = 10000;
-    //初始种群
+
     let populationList = initPopulation10(m,populationNum,gaData.total);
     gaData.interval = setInterval(function (){
+
+        if (gaData.isAborted) {
+            clearInterval(gaData.interval);
+            return;
+        }
         let nextGenerationList = [];
-        // 繁衍后代
+
         // for (let i = 0; i < populationNum; i++) {
         //     let father = selectGoodFather(populationList,2);
         //     nextGenerationList.push(nextGeneration(father));
@@ -44,16 +49,15 @@ function initPopulation10(m,populationNum,total) {
     return populationList;
 }
 
-// 生成固定数值的数组
+
 function generatePositiveIntegersWithFixedSum(m, total) {
     let length = m*2+1;
-    // 生成长度为 length 的数组，每个元素初始化为 1
+
     let c11 = Array(m+1).fill(0);
     let e10 = Array(m).fill(1);
     let integers = [];
     if(gaData.events>0){
         let leftNum = m;
-        // 随机选择一个位置，将其值加1
         while (leftNum < gaData.events) {
             let randomIndex = Math.floor(Math.random() * m);
             e10[randomIndex]++;
@@ -68,9 +72,8 @@ function generatePositiveIntegersWithFixedSum(m, total) {
         integers = c11.concat(e10);
     }else{
         integers = c11.concat(e10);
-        // 计算数组的总和
         let currentSum = m;
-        // 随机选择一个位置，将其值加1
+
         while (currentSum < total) {
             let randomIndex = Math.floor(Math.random() * length);
             integers[randomIndex]++;
@@ -80,7 +83,7 @@ function generatePositiveIntegersWithFixedSum(m, total) {
 
     return [integers.slice(0,m),integers.slice(m+1,2*m+1),integers[m]];
 }
-//生成特定长度的字符串
+
 function generateRandomBinaryString(length) {
     let binaryArray = [];
     for (let i = 0; i < length; i++) {
@@ -96,7 +99,7 @@ function generateRandomBinaryString(length) {
     })
     return binaryArray;
 }
-// 10进制转2进制
+
 function tenToBit(n,bitLength){
     let bitN = n.toString(2);
     let tempStr="";
@@ -105,7 +108,7 @@ function tenToBit(n,bitLength){
     }
     return tempStr+bitN;
 }
-//表格呈现删失和死亡人数
+
 function showCandE(populationList){
     let minPopulation = populationList[0];
     populationList.forEach(function (value){
