@@ -728,11 +728,32 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 blue.width = c.width;
                 blue.height = c.height;
                 ctx = c.getContext("2d");
-                const img = new Image();
-                img.src = jsonData.canvas_image_base64;
-                img.onload = function() {
-                    ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
-                };
+
+                if (jsonData.canvas_image_base64 && jsonData.canvas_image_base64.trim() !== "") {
+                    const img = new Image();
+                    img.src = jsonData.canvas_image_base64;
+                    img.onload = function() {
+                        ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
+                    };
+                } else {
+                    ctx.fillStyle = "#F0F0F0";
+                    ctx.fillRect(0, 0, jsonData.canvas_width, jsonData.canvas_height);
+
+                    ctx.fillStyle = "#888888";
+                    ctx.font = "bold 24px Arial";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+
+                    let centerX = jsonData.canvas_width / 2;
+                    let centerY = jsonData.canvas_height / 2;
+
+                    ctx.fillText("Original KM curve image removed for copyright compliance.", centerX, centerY - 20);
+                    ctx.fillText("Coordinates remain intact for pseudo-IPD reproducibility.", centerX, centerY + 20);
+
+                    ctx.strokeStyle = "#CCCCCC";
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(0, 0, jsonData.canvas_width, jsonData.canvas_height);
+                }
                 showAtRisk();
                 refreshPoint();
                 drawInforLine();
@@ -776,11 +797,32 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 blue.width = c.width;
                 blue.height = c.height;
                 ctx = c.getContext("2d");
-                const img = new Image();
-                img.src = jsonData.canvas_image_base64;
-                img.onload = function() {
-                    ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
-                };
+                if (jsonData.canvas_image_base64 && jsonData.canvas_image_base64.trim() !== "") {
+                    const img = new Image();
+                    img.src = jsonData.canvas_image_base64;
+                    img.onload = function() {
+                        ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
+                    };
+                } else {
+                    ctx.fillStyle = "#F0F0F0";
+                    ctx.fillRect(0, 0, jsonData.canvas_width, jsonData.canvas_height);
+
+                    ctx.fillStyle = "#888888";
+                    ctx.font = "bold 24px Arial";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+
+                    let centerX = jsonData.canvas_width / 2;
+                    let centerY = jsonData.canvas_height / 2;
+
+                    ctx.fillText("Original KM curve image removed for copyright compliance.", centerX, centerY - 20);
+                    ctx.fillText("Coordinates remain intact for pseudo-IPD reproducibility.", centerX, centerY + 20);
+
+                    ctx.strokeStyle = "#CCCCCC";
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(0, 0, jsonData.canvas_width, jsonData.canvas_height);
+                }
+
                 showAtRisk();
                 refreshPoint();
                 drawInforLine();
