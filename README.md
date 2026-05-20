@@ -18,6 +18,7 @@ Unlike traditional digitizers, KM-PoPiGo employs a **multi-constraint optimizati
 * **High Precision:** Maximizes accuracy by utilizing available constraints (N, E, R, C) to calibrate the reconstruction algorithm.
 * **Full Workflow:** Covers image preprocessing, coordinate calibration, key point marking, and final IPD generation.
 * **Reproducibility:** Built-in **"Project Management"** module allows saving/loading sessions via JSON files, ensuring transparent peer review and workflow continuity.
+* **Copyright-Safe Open Science:** Easily strip copyrighted journal images from exported JSONs. The tool will dynamically render a coordinate-preserving placeholder, allowing safe public sharing of reconstruction data without legal risks.
 ---
 
 ## 🚀 Quick Start
@@ -60,6 +61,12 @@ New users are encouraged to explore the **"Example Cases"** module.
 * **Save Project:** Exports the current session (image, calibration, marks, parameters) as a `.json` file. This file can be shared with reviewers for **collaborative reproduction**.
 * **Load Project:** Restores a previously saved session to verify results or continue work.
 
+### 🛡️ Copyright-Compliant Data Sharing (For Peer Review & Open Source)
+Sharing published KM curve images (even embedded in JSON files) can violate publisher copyrights (e.g., Elsevier, NEJM). KM-PoPiGo provides a built-in solution for legally sharing your reconstruction projects with reviewers or the public:
+1. Export your project using **Save Project**.
+2. Open the exported `.json` file in any text editor.
+3. Locate the `"canvas_image_base64"` field and clear its content (leave it as `""`).
+4. **Result:** When others load this sanitized JSON, KM-PoPiGo will automatically generate a gray placeholder matching the exact dimensions of the original image. All your extracted coordinates, points, and study parameters will overlay perfectly, ensuring **100% methodological transparency and reproducibility** with **zero copyright infringement risk**.
 
 ## 📜 License
 
