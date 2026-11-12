@@ -799,7 +799,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 const img = new Image();
                 img.src = jsonData.canvas_image_base64 && jsonData.canvas_image_base64.trim() !== ""
                     ? jsonData.canvas_image_base64
-                    : filename + '/moni.png';
+                    : filename.replace(/\/[^/]+$/, '/moni.png');
                 img.onload = function() {
                     ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
                 };
