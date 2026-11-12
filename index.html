@@ -345,7 +345,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 </div>
 <div id="ipdresultWindow"
      style="position:absolute;min-width: 500px;background-color: #efefef;top: 150px;left: 300px;z-index: 100000;bottom:0;overflow:scroll;display: none;right: 300px;">
-    <div onclick="$('#ipdresultWindow').hide()" style="position: absolute;right: 10px;top:10px;">
+    <div onclick="$('#ipdresultWindow').hide()" style="position: absolute;right: 0px;top:10px;">
         <div class="layui-badge sqclose">
             <i class="layui-icon layui-icon-close" style="font-size: 14px; color: #FFFFFF;"></i>
         </div>
@@ -1063,6 +1063,8 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 
             showAllResults()
             layer.closeAll();
+        }, function () {
+            layer.closeAll();
         });
     }
 
@@ -1221,7 +1223,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             "# Note: Modify the reference group name below\n"+
             "df$group <- relevel(df$group, ref = \""+refgroup+"\")\n" ;
         codestr += "survival_data <- Surv(time = df$time, event = df$status)\n" +
-            "fit <- coxph(survival_data ~ group, data = df)\n"
+            "fit <- coxph(survival_data ~ group, data = df)\n" +
 
             "summary_info <- summary(fit)\n" +
             "hr <- summary_info$conf.int[1, \"exp(coef)\"]\n" +
@@ -1278,6 +1280,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             codestr += "group=c(\"" + grouparray.join("\",\"") + "\")\n";
             codestr += ")\n"
         }
+
         codestr += "survival_data <- Surv(time = df$time, event = df$status)\n" +
             "surv_fit <- survfit(survival_data ~ group, data = df)\n" +
             "# Calculate median survival time\n" +
