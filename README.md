@@ -21,6 +21,22 @@ Unlike traditional digitizers, KM-PoPiGo employs a **multi-constraint optimizati
 * **Copyright-Safe Open Science:** Easily strip copyrighted journal images from exported JSONs. The tool will dynamically render a coordinate-preserving placeholder, allowing safe public sharing of reconstruction data without legal risks.
 ---
 
+## 🐍 Python Core (KMScribe)
+
+The [`python/`](python/) directory contains KMScribe, a headless Python 3.10+ implementation of the core reconstruction workflow. It accepts annotated KM coordinates and available N/E/R/C constraints, then returns reconstructed IPD, recalculated KM curves, loss components, and quality diagnostics.
+
+The core package uses only the Python standard library. It does not perform automatic image digitization and does not include visual model training or synthetic-data generation.
+
+```bash
+cd python
+python -m pip install .
+python -m kmscribe examples/two_arms.json --seed 7 --output outputs/result.json --csv outputs/ipd.csv
+```
+
+See the [Python core documentation](python/README.md) for the input format, API, command-line options, and validation scope.
+
+---
+
 ## 🚀 Quick Start
 
 ### Online Mode
