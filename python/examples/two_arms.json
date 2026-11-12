@@ -1,0 +1,30 @@
+{
+  "arms": [
+    {
+      "arm_id": "treatment",
+      "label": "Treatment",
+      "sample_size": 10,
+      "number_of_events": 4,
+      "time_unit": "month",
+      "key_points": [
+        {"type": "start", "time": 0, "survival": 1},
+        {"type": "breakpoint", "time": 2, "survival": 0.8},
+        {"type": "breakpoint", "time": 5, "survival": 0.6},
+        {"type": "end", "time": 8, "survival": 0.6}
+      ],
+      "at_risk_table": [[0, 10], [3, 8], [6, 5]],
+      "censor_times": [6, 8]
+    },
+    {
+      "arm_id": "control",
+      "label": "Control",
+      "sample_size": 10,
+      "number_of_events": 6,
+      "time_unit": "month",
+      "time_values": [0, 2, 5],
+      "survival_probabilities": [1, 0.7, 0.4],
+      "end_time": 8,
+      "at_risk_table": [[0, 10], [3, 7], [6, 3]]
+    }
+  ]
+}
