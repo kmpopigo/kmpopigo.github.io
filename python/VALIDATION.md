@@ -1,6 +1,6 @@
 # Validation
 
-Release checked on 2026-11-12 for KMScribe 0.1.0.
+Release checked on 2026-11-12 for KM-PoPiGo Python Core 0.1.0.
 
 ## Scope
 
@@ -33,7 +33,7 @@ The tests are self-contained and require no external datasets. Passing an input-
 Command:
 
 ```bash
-python -m kmscribe examples/two_arms.json --seed 7 --no-time-limit \
+python -m kmpopigo examples/two_arms.json --seed 7 --no-time-limit \
   --output outputs/result.json --csv outputs/ipd.csv --overwrite
 ```
 
@@ -47,4 +47,4 @@ Command:
 python -m pip wheel . --no-deps --no-build-isolation -w dist
 ```
 
-Observed result: `kmscribe-0.1.0-py3-none-any.whl` built successfully. The wheel contains the core `kmscribe` package and license metadata; experimental modules are not included.
+Observed result: `kmpopigo-0.1.0-py3-none-any.whl` built successfully. The wheel contains the core `kmpopigo` package and license metadata; experimental modules are not included.

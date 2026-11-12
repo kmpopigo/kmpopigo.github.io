@@ -1,8 +1,8 @@
 # KM-PoPiGo: High-Precision IPD Reconstruction from KM Curves
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Topic](https://img.shields.io/badge/Topic-Survival%20Analysis-blue)](https://github.com/topics/survival-analysis)
-[![Web App](https://img.shields.io/badge/Web-Live%20Demo-green)](https://kmpopigo.github.io/)
+[![Topic](https://img.shields.io/badge/Topic-Survival%20Analysis-blue.svg)](https://github.com/topics/survival-analysis)
+[![Web App](https://img.shields.io/badge/Web-Live%20Demo-green.svg)](https://kmpopigo.github.io/)
 
 ## 📖 Description
 
@@ -21,16 +21,16 @@ Unlike traditional digitizers, KM-PoPiGo employs a **multi-constraint optimizati
 * **Copyright-Safe Open Science:** Easily strip copyrighted journal images from exported JSONs. The tool will dynamically render a coordinate-preserving placeholder, allowing safe public sharing of reconstruction data without legal risks.
 ---
 
-## 🐍 Python Core (KMScribe)
+## 🐍 KM-PoPiGo Python Core
 
-The [`python/`](python/) directory contains KMScribe, a headless Python 3.10+ implementation of the core reconstruction workflow. It accepts annotated KM coordinates and available N/E/R/C constraints, then returns reconstructed IPD, recalculated KM curves, loss components, and quality diagnostics.
+The [`python/`](python/) directory contains the headless Python 3.10+ implementation of the KM-PoPiGo core reconstruction workflow. It accepts annotated KM coordinates and available N/E/R/C constraints, then returns reconstructed IPD, recalculated KM curves, loss components, and quality diagnostics.
 
 The core package uses only the Python standard library. It does not perform automatic image digitization and does not include visual model training or synthetic-data generation.
 
 ```bash
 cd python
 python -m pip install .
-python -m kmscribe examples/two_arms.json --seed 7 --output outputs/result.json --csv outputs/ipd.csv
+python -m kmpopigo examples/two_arms.json --seed 7 --output outputs/result.json --csv outputs/ipd.csv
 ```
 
 See the [Python core documentation](python/README.md) for the input format, API, command-line options, and validation scope.
@@ -58,7 +58,7 @@ To ensure data privacy or work without an internet connection:
 The reconstruction process follows a structured 7-step pipeline:
 
 1.  **Load Image:** Upload the KM curve image (Step 1).
-2.  **Image Preprocessing:** Crop the region of interest (Step 2.1) and apply masks to remove interfering elements like text or legends (Step 2.2).
+2.  **Image Preprocessing:** Crop the region of interest (Step 2.1) and apply masks for further analysis.
 3.  **Calibrate Origin:** Locate the (0,0) point on the axes (Step 3).
 4.  **Calibrate Axis Limits:** Set the maximum X (Time) and Y (Probability) values (Step 4).
 5.  **Mark Key Points:**

@@ -5,9 +5,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from kmscribe import reconstruct, validate, InputError
-from kmscribe.inputs import parse
-from kmscribe.engine import to_ipd, km_curve
+from kmpopigo import reconstruct, validate, InputError
+from kmpopigo.inputs import parse
+from kmpopigo.engine import to_ipd, km_curve
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -133,7 +133,7 @@ class CoreTests(unittest.TestCase):
     def test_cli_stdin_output_and_overwrite_guard(self):
         def call(*args, payload=None):
             return subprocess.run(
-                [sys.executable, "-m", "kmscribe", *args],
+                [sys.executable, "-m", "kmpopigo", *args],
                 input=json.dumps(payload) if payload is not None else None,
                 capture_output=True, text=True, encoding="utf-8", cwd=ROOT,
             )

@@ -1,6 +1,6 @@
-# KMScribe
+# KM-PoPiGo
 
-KMScribe is a headless Python implementation of the KM-PoPiGo survival-data reconstruction workflow. It converts manually annotated Kaplan–Meier coordinates and reported constraints into reconstructed individual participant data (IPD), a recalculated Kaplan–Meier curve, optimization diagnostics, and quality checks.
+KM-PoPiGo is a headless Python implementation of the KM-PoPiGo survival-data reconstruction workflow. It converts manually annotated Kaplan–Meier coordinates and reported constraints into reconstructed individual participant data (IPD), a recalculated Kaplan–Meier curve, optimization diagnostics, and quality checks.
 
 The core package uses only the Python standard library. It requires Python 3.10 or later and does not require a browser, R, NumPy, a network connection, or model inference.
 
@@ -20,7 +20,7 @@ Not included:
 - Image editing, visual model training, synthetic-data generation, or training scripts.
 - HR estimation, Cox regression, meta-analysis, or R plotting code.
 
-KMScribe reconstructs data compatible with the supplied annotations and constraints. It does not uniquely recover the original patient-level observations.
+KM-PoPiGo reconstructs data compatible with the supplied annotations and constraints. It does not uniquely recover the original patient-level observations.
 
 ## Installation
 
@@ -35,7 +35,7 @@ For development, use `python -m pip install -e .`. The package can also be run d
 ## Python API
 
 ```python
-from kmscribe import reconstruct
+from kmpopigo import reconstruct
 
 result = reconstruct("examples/two_arms.json", seed=7)
 ipd = result["ipd"]
@@ -51,7 +51,7 @@ Use `validate(data)` to normalize and validate input without running optimizatio
 Write a complete JSON result and a combined IPD CSV:
 
 ```bash
-python -m kmscribe examples/two_arms.json \
+python -m kmpopigo examples/two_arms.json \
   --seed 7 \
   --output outputs/result.json \
   --csv outputs/ipd.csv
@@ -60,16 +60,16 @@ python -m kmscribe examples/two_arms.json \
 Read JSON from standard input and write only the result JSON to standard output:
 
 ```bash
-python -m kmscribe -
+python -m kmpopigo -
 ```
 
 Validate without reconstruction:
 
 ```bash
-python -m kmscribe examples/two_arms.json --validate
+python -m kmpopigo examples/two_arms.json --validate
 ```
 
-After installation, the `kmscribe` command provides the same interface.
+After installation, the `kmpopigo` command provides the same interface.
 
 Exit codes:
 

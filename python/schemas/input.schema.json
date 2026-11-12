@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "KMScribe canonical reconstruction input",
+  "title": "KM-PoPiGo canonical reconstruction input",
   "description": "Schema for AI-generated canonical JSON. Legacy web JSON is accepted by the Python adapter separately. Runtime validation additionally checks geometry and constraint consistency.",
   "oneOf": [
     {"$ref": "#/$defs/single"},
