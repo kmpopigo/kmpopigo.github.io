@@ -895,7 +895,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             return layui.layer.msg("Please enter the correct Sample Size.");
         }
         if (plist_blue.length < 2) {
-            return layui.layer.msg("Please mark at least two key points to define the curve.");
+            return layui.layer.msg("Insufficient points selected. Please mark at least two key points to define the curve.");
         }
         if (maxtime < tlist_blue[tlist_blue.length - 1]) {
             return layui.layer.msg("Time Domain Mismatch: The last break point exceeds the maximum follow-up time.");
