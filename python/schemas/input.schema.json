@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KMScribe canonical reconstruction input",
+  "description": "Schema for AI-generated canonical JSON. Legacy web JSON is accepted by the Python adapter separately. Runtime validation additionally checks geometry and constraint consistency.",
+  "oneOf": [
+    {"$ref": "#/$defs/single"},
+    {
+      "type": "object",
+      "required": ["arms"],
+      "properties": {
+        "arms": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/arm"}},
+        "options": {"$ref": "#/$defs/options"},
+        "schema_version": {"type": "string"},
+        "metadata": {}
+      },
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "nonnegative": {"type": "number", "minimum": 0},
+    "probability": {"type": "number", "minimum": 0, "maximum": 1},
+    "pair": {
+      "type": "array", "minItems": 2, "maxItems": 2,
+      "prefixItems": [{"$ref": "#/$defs/nonnegative"}, {"$ref": "#/$defs/probability"}]
+    },
+    "point": {
+      "oneOf": [
+        {"$ref": "#/$defs/pair"},
+        {"type": "object", "required": ["time", "survival"],
+         "properties": {"type": {"enum": ["start", "breakpoint", "end"]},
+                        "time": {"$ref": "#/$defs/nonnegative"}, "survival": {"$ref": "#/$defs/probability"}},
+         "additionalProperties": true}
+      ]
+    },
+    "armFields": {
+      "type": "object", "required": ["sample_size"],
+      "properties": {
+        "arm_id": {"type": "string", "minLength": 1},
+        "label": {"type": "string"},
+        "group_name": {"type": "string"},
+        "time_unit": {"type": "string"},
+        "sample_size": {"type": "integer", "minimum": 1},
+        "number_of_events": {"type": ["integer", "null"], "minimum": 0},
+        "key_points": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/point"}},
+        "time_values": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nonnegative"}},
+        "survival_probabilities": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/probability"}},
+        "end_time": {"type": "number", "exclusiveMinimum": 0},
+        "at_risk_table": {
+          "type": ["array", "null"],
+          "items": {"type": "array", "minItems": 2, "maxItems": 2,
+                    "prefixItems": [{"$ref": "#/$defs/nonnegative"}, {"type": "integer", "minimum": 0}]}
+        },
+        "censor_times": {"type": ["array", "null"], "items": {"$ref": "#/$defs/nonnegative"}},
+        "min_censoring_counts": {"type": ["array", "null"], "items": {"type": "integer", "minimum": 0}},
+        "risk_time_convention": {"const": "before"},
+        "probability_axis_span": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "metadata": {}, "schema_version": {"type": "string"}
+      },
+      "oneOf": [
+        {"required": ["key_points"], "not": {"anyOf": [{"required": ["time_values"]}, {"required": ["survival_probabilities"]}]}},
+        {"required": ["time_values", "survival_probabilities", "end_time"], "not": {"required": ["key_points"]}}
+      ]
+    },
+    "arm": {"allOf": [{"$ref": "#/$defs/armFields"}], "unevaluatedProperties": false},
+    "single": {
+      "allOf": [{"$ref": "#/$defs/armFields"}],
+      "properties": {"options": {"$ref": "#/$defs/options"}},
+      "unevaluatedProperties": false
+    },
+    "options": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "seed": {"type": "integer", "minimum": 0, "default": 0},
+        "population_size": {"type": "integer", "minimum": 4, "multipleOf": 2, "default": 100},
+        "patience": {"type": "integer", "minimum": 1, "default": 2000},
+        "max_generations": {"type": "integer", "minimum": 1, "default": 100000},
+        "max_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0, "default": 30},
+        "restarts": {"type": "integer", "minimum": 1, "default": 1},
+        "probability_tolerance": {"type": "number", "exclusiveMinimum": 0, "default": 0.01},
+        "count_tolerance": {"type": "number", "exclusiveMinimum": 0, "default": 0.02},
+        "censoring_strategy": {"enum": ["uniform", "marked_window"], "default": "uniform"}
+      }
+    }
+  }
+}
