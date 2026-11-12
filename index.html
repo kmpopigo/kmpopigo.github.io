@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -345,7 +345,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 </div>
 <div id="ipdresultWindow"
      style="position:absolute;min-width: 500px;background-color: #efefef;top: 150px;left: 300px;z-index: 100000;bottom:0;overflow:scroll;display: none;right: 300px;">
-    <div onclick="$('#ipdresultWindow').hide()" style="position: absolute;right: 0px;top:10px;">
+    <div onclick="$('#ipdresultWindow').hide()" style="position: absolute;right: 10px;top:10px;">
         <div class="layui-badge sqclose">
             <i class="layui-icon layui-icon-close" style="font-size: 14px; color: #FFFFFF;"></i>
         </div>
@@ -747,8 +747,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                     let centerX = jsonData.canvas_width / 2;
                     let centerY = jsonData.canvas_height / 2;
 
-                    ctx.fillText("Original KM curve image removed for copyright compliance.", centerX, centerY - 20);
-                    ctx.fillText("Coordinates remain intact for pseudo-IPD reproducibility.", centerX, centerY + 20);
+                    ctx.fillText("No embedded curve image; coordinates remain loaded.", centerX, centerY);
 
                     ctx.strokeStyle = "#CCCCCC";
                     ctx.lineWidth = 2;
@@ -797,31 +796,22 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
                 blue.width = c.width;
                 blue.height = c.height;
                 ctx = c.getContext("2d");
-                if (jsonData.canvas_image_base64 && jsonData.canvas_image_base64.trim() !== "") {
-                    const img = new Image();
-                    img.src = jsonData.canvas_image_base64;
-                    img.onload = function() {
-                        ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
-                    };
-                } else {
+                const img = new Image();
+                img.src = jsonData.canvas_image_base64 && jsonData.canvas_image_base64.trim() !== ""
+                    ? jsonData.canvas_image_base64
+                    : filename + '/moni.png';
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, jsonData.canvas_width, jsonData.canvas_height);
+                };
+                img.onerror = function() {
                     ctx.fillStyle = "#F0F0F0";
                     ctx.fillRect(0, 0, jsonData.canvas_width, jsonData.canvas_height);
-
                     ctx.fillStyle = "#888888";
-                    ctx.font = "bold 24px Arial";
+                    ctx.font = "24px Arial";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-
-                    let centerX = jsonData.canvas_width / 2;
-                    let centerY = jsonData.canvas_height / 2;
-
-                    ctx.fillText("Original KM curve image removed for copyright compliance.", centerX, centerY - 20);
-                    ctx.fillText("Coordinates remain intact for pseudo-IPD reproducibility.", centerX, centerY + 20);
-
-                    ctx.strokeStyle = "#CCCCCC";
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(0, 0, jsonData.canvas_width, jsonData.canvas_height);
-                }
+                    ctx.fillText("Curve image unavailable; coordinates remain loaded.", jsonData.canvas_width / 2, jsonData.canvas_height / 2);
+                };
 
                 showAtRisk();
                 refreshPoint();
@@ -905,7 +895,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             return layui.layer.msg("Please enter the correct Sample Size.");
         }
         if (plist_blue.length < 2) {
-            return layui.layer.msg("Insufficient points selected. Please mark at least two key points to define the curve.");
+            return layui.layer.msg("Please mark at least two key points to define the curve.");
         }
         if (maxtime < tlist_blue[tlist_blue.length - 1]) {
             return layui.layer.msg("Time Domain Mismatch: The last break point exceeds the maximum follow-up time.");
@@ -1073,8 +1063,6 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 
             showAllResults()
             layer.closeAll();
-        }, function () {
-            layer.closeAll();
         });
     }
 
@@ -1233,7 +1221,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             "# Note: Modify the reference group name below\n"+
             "df$group <- relevel(df$group, ref = \""+refgroup+"\")\n" ;
         codestr += "survival_data <- Surv(time = df$time, event = df$status)\n" +
-            "fit <- coxph(survival_data ~ group, data = df)\n" +
+            "fit <- coxph(survival_data ~ group, data = df)\n"
 
             "summary_info <- summary(fit)\n" +
             "hr <- summary_info$conf.int[1, \"exp(coef)\"]\n" +
@@ -1290,7 +1278,6 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
             codestr += "group=c(\"" + grouparray.join("\",\"") + "\")\n";
             codestr += ")\n"
         }
-
         codestr += "survival_data <- Surv(time = df$time, event = df$status)\n" +
             "surv_fit <- survfit(survival_data ~ group, data = df)\n" +
             "# Calculate median survival time\n" +
@@ -1375,7 +1362,7 @@ bottom: 5px;border-right: #2F4056;box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.5);"
 </script>
 <script>
     function ahelp(){
-        layui.layer.alert('Please separate the Numbers At Risk for the current group by spaces. For example: 128 48 32 12 6 0 0. For detailed instructions, please refer to the <a href="doc/ipd/index.html" style="color: #007DDB;" target="_blank">Documentation</a> or see the example input in the <span onclick=\"openTrainWindow()\" style="color: #FF5722;font-weight: bold;cursor: pointer;">KM Curve Case</span>.',{
+        layui.layer.alert('Please separate the Numbers At Risk for the current group by spaces. For example: 128 48 32 12 6 0 0. For detailed instructions, please refer to the <a href="doc/ipd/index.html" style="color: #007DDB;" target="_blank">Documentation</a> or see the example input in the <span onclick="openTrainWindow()" style="color: #FF5722;font-weight: bold;cursor: pointer;">KM Curve Case</span>.',{
             title : "Help",
             btn : ["OK"],
             shadeClose : true
